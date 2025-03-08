@@ -20,13 +20,14 @@ MindCare is a comprehensive mental health platform designed to support users in 
 
 https://github.com/Ericanshimir/MindCare/tree/main/MindCare/designs
 
-# Link to the video showcasing MindCare App functionalities.
+# Link to the demo of MindCare App.
 
-https://youtu.be/sGepfbtpCOo
+https://youtu.be/vzFGay0NITA
 
-# Analysis of  the results and how I achieved or missed the objectives in the project proposal. 
+# Link to the deployed version of MindCare App
 
-https://docs.google.com/document/d/1ndavCCUKBWmEi2BoIczrs38Iwepr5g7VvlHKB_dlork/edit?tab=t.0
+https://mindcare-burundi.onrender.com
+
 
 ### Steps to Run the App
 1. **Clone the Repository**
