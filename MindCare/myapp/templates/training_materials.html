@@ -1,0 +1,197 @@
+{% include 'translation.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="training-title">Training Materials</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      color: #020b15;
+      text-align: center;
+      padding: 20px;
+      background-color: #1f4870;
+      color: white;
+      margin: 0;
+    }
+
+    p {
+      text-align: center;
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+
+    .admin-panel {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .admin-upload {
+      background-color: #1f4870;
+      color: white;
+      padding: 10px 16px;
+      text-decoration: none;
+      border-radius: 5px;
+      display: inline-block;
+      margin: 5px;
+      font-size: 1em;
+    }
+
+    .container {
+      width: 85%;
+      margin: 20px auto;
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 15px;
+      color: #1f6f70;
+    }
+
+    .video-container, .list-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .video-item, .list-item {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      border-radius: 5px;
+    }
+
+    .list-item a {
+      display: block;
+      margin-top: 10px;
+      color: #1f4870;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .list-item a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .video-item, .list-item {
+        width: 90%;
+      }
+    }
+
+    /* Language Selection Container */
+    .language-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px; /* Moved to the left side */
+      background-color: #1f4870;
+      color: white;
+      padding: 10px 16px;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1em;
+      transition: 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1 id="training-title">Training Materials</h1>
+  <a href="{% if is_professional %}{% url 'professional_dashboard' %}{% else %}{% url 'dashboard' %}{% endif %}" class="back-button">⬅ Back to Dashboard</a>
+
+  <p id="training-desc">Explore educational resources including articles, books, and videos.</p>
+
+  {% if user.is_authenticated and user.is_superuser %}
+    <div class="admin-panel">
+      <a href="{% url 'upload_video' %}" class="admin-upload" id="upload-video">Upload Video</a>
+      <a href="{% url 'upload_book' %}" class="admin-upload" id="upload-book">Upload Book</a>
+      <a href="{% url 'upload_article' %}" class="admin-upload" id="upload-article">Upload Article</a>
+    </div>
+  {% endif %}
+
+  <div class="container">
+    <h2 class="section-title" id="video-section">Videos</h2>
+    <div class="video-container">
+      {% for video in videos %}
+        <div class="video-item">
+          <h4 id="video-title-{{ video.id }}">{{ video.title }} ({{ video.category }})</h4>
+          {% if video.video_file and video.video_file.url %}
+            <video controls>
+              <source src="{{ video.video_file.url }}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          {% else %}
+            <p id="no-video">No video available.</p>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p id="no-videos">No videos available.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title" id="book-section">Books</h2>
+    <div class="list-container">
+      {% for book in books %}
+        <div class="list-item">
+          <h4 id="book-title-{{ book.id }}">{{ book.title }}</h4>
+          <a href="{{ book.pdf_file.url }}" target="_blank" id="download-book">Download PDF</a>
+        </div>
+      {% empty %}
+        <p id="no-books">No books available.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="container">
+    <h2 class="section-title" id="article-section">Articles</h2>
+    <div class="list-container">
+      {% for article in articles %}
+        <div class="list-item">
+          <h4 id="article-title-{{ article.id }}">{{ article.title }}</h4>
+          <p id="article-summary-{{ article.id }}">{{ article.summary }}</p>
+          <a href="{{ article.url }}" target="_blank" id="read-more">Read More</a>
+        </div>
+      {% empty %}
+        <p id="no-articles">No articles available.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  
+
+</body>
+</html>

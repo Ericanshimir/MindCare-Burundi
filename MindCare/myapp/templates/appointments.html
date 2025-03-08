@@ -1,0 +1,194 @@
+{% block title %}My Appointments{% endblock %}
+
+<style>
+    body {
+        background: linear-gradient(to right, #141e30, #243b55);
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.3);
+        margin-top: 50px;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    h2 {
+        font-size: 2em;
+        font-weight: bold;
+        color: #1f4870;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .table thead {
+        background: #1f4870;
+        color: white;
+        font-size: 1.1em;
+    }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
+    }
+
+    .table tbody tr:hover {
+        background: #eef7ff;
+        transform: scale(1.02);
+    }
+
+    /* ✅ Simple Colored Text for Status */
+    .status-past {
+        color: red;
+        font-weight: bold;
+    }
+
+    .status-upcoming {
+        color: green;
+        font-weight: bold;
+    }
+
+    .alert {
+        font-size: 1.2em;
+        padding: 15px;
+        background-color: #ffcccb;
+        border-radius: 5px;
+    }
+
+    .btn-back {
+        display: block;
+        width: 200px;
+        margin: 20px auto;
+        padding: 10px;
+        text-align: center;
+        background: #1f4870;
+        color: white;
+        font-size: 1em;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background: #0056b3;
+        transform: scale(1.05);
+    }
+
+    .back-button {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background-color: #1f4870;
+        color: white;
+        padding: 10px 16px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 1em;
+        transition: 0.3s;
+    }
+
+    .back-button:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+
+    /* Hide extra rows initially */
+    .hidden { display: none; }
+
+    /* Read More Button */
+    .read-more-btn {
+        background-color: #1f4870;
+        color: white;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 5px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: 0.3s;
+        display: block;
+        margin: 20px auto;
+    }
+
+    .read-more-btn:hover { background-color: #16324f; }
+</style>
+
+<div class="container mt-4">
+
+    <h2><i class="fas fa-calendar-check"></i> My Appointments</h2>
+
+    {% if appointments %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mt-3 shadow-sm rounded">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="appointment-list">
+                    {% for appointment in appointments %}
+                    <tr class="appointment-row {% if forloop.counter > 10 %}hidden{% endif %}">
+                        <td>{{ appointment.client.username }}</td>
+                        <td>{{ appointment.client.email }}</td>
+                        <td>{{ appointment.date }}</td>
+                        <td>{{ appointment.time }}</td>
+                        <td>
+                            {% if appointment.date < today %}
+                                <span class="status-past">Past</span>
+                            {% else %}
+                                <span class="status-upcoming">Upcoming</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Read More Button -->
+        {% if appointments|length > 10 %}
+            <button id="read-more-btn" class="read-more-btn" onclick="toggleMore()">See More</button>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            <p class="mb-0">No appointments booked yet.</p>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'professional_dashboard' %}" class="btn-back">Back to Dashboard</a>
+</div>
+
+<script>
+    function toggleMore() {
+        let hiddenRows = document.querySelectorAll('.hidden');
+        let button = document.getElementById('read-more-btn');
+        
+        if (hiddenRows.length > 0) {
+            hiddenRows.forEach(row => row.classList.remove('hidden'));
+            button.innerText = 'Show Less';
+        } else {
+            let rows = document.querySelectorAll('.appointment-row');
+            rows.forEach((row, index) => {
+                if (index >= 10) row.classList.add('hidden');
+            });
+            button.innerText = 'See More';
+        }
+    }
+</script>
+

@@ -1,0 +1,10 @@
+MindCare/myapp/credentials.json
+
+MindCare/myapp/credentials.json
+
+
+*.pyc
+__pycache__/
+*.sqlite3
+.env
+venv/

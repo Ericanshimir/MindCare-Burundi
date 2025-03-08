@@ -1,0 +1,104 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% trans "Upload Video" %}</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #1f4870;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+      width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #020b15;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input[type="file"] {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    .upload-button {
+      background: #1f4870;
+      color: white;
+      padding: 12px;
+      font-size: 1.1em;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background 0.3s ease;
+    }
+
+    .upload-button:hover {
+      background: #0056b3;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 15px;
+      text-decoration: none;
+      color: #1f4870;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: #1f4870;
+    }
+
+    /* Language Selector */
+    .language-selector {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>{% trans "Upload a Video" %}</h1>
+    <form action="." method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="upload-button" type="submit">{% trans "Upload" %}</button>
+    </form>
+    <a href="{% url 'training_materials' %}" class="back-link">{% trans "Back to Videos" %}</a>
+
+    <!-- Language Selector -->
+    <form action="{% url 'set_language' %}" method="post" class="language-selector">
+      {% csrf_token %}
+      <select name="language" onchange="this.form.submit()">
+        <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+        <option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected{% endif %}>Français</option>
+        <option value="sw" {% if LANGUAGE_CODE == 'sw' %}selected{% endif %}>Swahili</option>
+      </select>
+    </form>
+  </div>
+</body>
+</html>

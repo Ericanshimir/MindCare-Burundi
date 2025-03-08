@@ -1,0 +1,202 @@
+{% load static %}
+{% include 'translation.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="dashboard-title">MindCare - Professional Dashboard</title>
+
+    <!-- ✅ FontAwesome & Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- ✅ Local Styles -->
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Poppins', sans-serif;
+        }
+        .wrapper {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #1f4870;
+            color: white;
+            position: fixed;
+            height: 100vh;
+            padding-top: 60px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            transition: width 0.3s;
+        }
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: white;
+            text-decoration: none;
+            transition: 0.3s ease-in-out;
+        }
+        .sidebar a i {
+            margin-right: 12px;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #4a647e;
+            border-left: 4px solid white;
+        }
+        .header {
+            background-color: #ffffff;
+            width: calc(100% - 250px);
+            height: 60px;
+            position: fixed;
+            top: 0;
+            left: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 600;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+            width: calc(100% - 250px);
+            margin-top: 60px;
+            overflow-y: auto;
+            max-height: calc(100vh - 60px);
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="sidebar">
+        <h4 class="text-center text-white mt-3" id="sidebar-title">MindCare</h4>
+        <a href="{% url 'professional_dashboard' %}" class="active" id="dashboard-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="{% url 'appointments' professional.id %}" id="appointments-link"><i class="fas fa-calendar-alt"></i> Appointments</a>
+        <a href="{% url 'anonymous_chat' %}" id="messages-link"><i class="fas fa-envelope"></i> Messages</a>
+        <a href="{% url 'professional_detail' professional.id %}" id="profile-link"><i class="fas fa-user"></i> Profile</a>
+        <a href="{% url 'update_availability' %}" id="manage-availability-link"><i class="fas fa-clock"></i> Manage Availability</a>
+        <a href="{% url 'quizzes' %}" id="mental-health-quizzes">📝 Mental Health Quizzes</a>
+        <a href="{% url 'training_materials' %}" id="training-materials">📚 Training Materials</a>
+        <a href="{% url 'settings_professional' %}" id="settings-link"><i class="fas fa-cogs"></i> Settings</a>
+        <a href="{% url 'logout' %}" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <header class="header">
+        <span id="welcome-message">Welcome, {{ professional.name }}</span>
+    </header>
+
+    <div class="content">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card p-3 mb-4">
+                    <h4 class="text-primary"><i class="fas fa-calendar-check"></i> Upcoming Appointments</h4>
+                    <ul class="list-group" id="appointment-list">
+                        {% for appointment in upcoming_appointments %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center appointment-row {% if forloop.counter > 10 %}hidden{% endif %}">
+                                <strong>{{ appointment.client.username }}</strong> - {{ appointment.date }} at {{ appointment.time }}
+                                <div>
+                                    <span class="badge bg-success">Upcoming</span>
+                                    <form method="POST" action="{% url 'remove_appointment' appointment.id %}" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-times"></i> Cancel
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% if upcoming_appointments|length > 10 %}
+                        <button id="read-more-appointments" class="btn btn-primary mt-2" onclick="toggleMore('appointment-list', 'read-more-appointments')">Read More</button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card p-3 mb-4">
+                    <h4 class="text-primary"><i class="fas fa-comments"></i> Messages</h4>
+                    <ul class="list-group" id="message-list">
+                        {% for message in messages %}
+                            <li class="list-group-item message-row {% if forloop.counter > 10 %}hidden{% endif %}">
+                                <strong>{{ message.sender.username }}</strong>: {{ message.content }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% if messages|length > 10 %}
+                        <button id="read-more-messages" class="btn btn-primary mt-2" onclick="toggleMore('message-list', 'read-more-messages')">Read More</button>
+                    {% endif %}
+                </div>
+                <div class="card p-3 mb-4">
+                    <h4 class="text-primary"><i class="fas fa-bell"></i> Notifications</h4>
+                    <ul class="list-group" id="notification-list">
+                        {% for notification in notifications %}
+                            <li class="list-group-item notification-row {% if forloop.counter > 10 %}hidden{% endif %}">
+                                {{ notification.message }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {% if notifications|length > 10 %}
+                        <button id="read-more-notifications" class="btn btn-primary mt-2" onclick="toggleMore('notification-list', 'read-more-notifications')">Read More</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleMore(listId, buttonId) {
+        let hiddenRows = document.querySelectorAll(`#${listId} .hidden`);
+        let button = document.getElementById(buttonId);
+        hiddenRows.forEach(row => row.classList.toggle('hidden'));
+        button.innerText = hiddenRows[0].classList.contains('hidden') ? 'Read More' : 'Show Less';
+    }
+</script>
+<script>
+    function toggleMore(listId, buttonId) {
+        let hiddenRows = document.querySelectorAll(`#${listId} .hidden`);
+        let visibleRows = document.querySelectorAll(`#${listId} .appointment-row:not(.hidden), 
+                                                      #${listId} .message-row:not(.hidden),
+                                                      #${listId} .notification-row:not(.hidden)`);
+        let button = document.getElementById(buttonId);
+
+        if (hiddenRows.length > 0) {
+            // Show hidden rows
+            hiddenRows.forEach(row => row.classList.remove('hidden'));
+            button.innerText = 'Show Less';
+        } else {
+            // Hide extra rows again
+            visibleRows.forEach((row, index) => {
+                if (index >= 10) row.classList.add('hidden');
+            });
+            button.innerText = 'Read More';
+        }
+    }
+
+    // Ensure the button is hidden if there are 10 or fewer items
+    document.addEventListener("DOMContentLoaded", function () {
+        let sections = [
+            { listId: "appointment-list", buttonId: "read-more-appointments" },
+            { listId: "message-list", buttonId: "read-more-messages" },
+            { listId: "notification-list", buttonId: "read-more-notifications" }
+        ];
+
+        sections.forEach(section => {
+            let totalItems = document.querySelectorAll(`#${section.listId} li`).length;
+            let button = document.getElementById(section.buttonId);
+            if (totalItems <= 10 && button) {
+                button.style.display = "none";
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

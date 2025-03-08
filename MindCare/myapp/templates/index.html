@@ -1,0 +1,848 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% include 'translation.html' %}
+    <div class="hero-content">
+        <h1>We are a team dedicated to making mental health support accessible to everyone.</h1>
+        <a href="{% url 'login' %}" class="btn btn-primary">Get Started</a>
+    </div>
+</div>
+<style>
+  /* Hero Section */
+.hero-content {
+    position: relative;
+    width: 100%;
+    height: 90vh; /* Full screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: url('/static/assets/img/erica.webp') no-repeat center center;
+    background-size: cover;
+    padding: 20px;
+}
+
+.hero-content::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(249, 249, 242, 0.8); /* Beige overlay */
+    z-index: 1;
+}
+
+.hero-content h1 {
+    font-size: 2rem !important; /* Ensures the size stays large */
+    font-weight: 400 !important; /* Forces normal weight, removing bold */
+    z-index: 9999 !important; /* Ensures it appears above overlays */
+    max-width: 70% !important; /* Keeps text width readable */
+    margin: 0 auto !important; /* Centers the text */
+    line-height: 1.4 !important; /* Improves readability */
+    color: #1f4870 !important; /* Forces the correct color */
+    text-align: center !important; /* Ensures it remains centered */
+    opacity: 0.9 !important; /* Slight transparency for a softer effect */
+    position: relative !important; /* Ensures it stays positioned correctly */
+}
+
+
+
+.hero-content a.btn-primary {
+    margin-top: 20px;
+    z-index: 2;
+    background-color: #1f4870;
+    color: white;
+    border: 2px solid #1f4870;
+    padding: 14px 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border-radius: 50px;
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hero-content a.btn-primary:hover {
+    background-color: white;
+    color: #1f4870;
+    border: 2px solid #1f4870;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content {
+        height: 75vh;
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+        max-width: 85%;
+    }
+
+    .hero-content a.btn-primary {
+        font-size: 1rem;
+        padding: 12px 25px;
+    }
+}
+.section-title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #1f4870; /* Main color */
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  position: relative;
+}
+
+.section-title span {
+  color: rgb(41, 22, 146); /* Highlight effect */
+}
+
+/* About Us Section */
+.about-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #f8f9fa;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.about-slider-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 60%;
+  margin: auto;
+}
+
+.about-slider {
+  display: flex;
+  width: 400%;
+  transition: transform 0.5s ease-in-out;
+}
+
+.about-card {
+  flex: 1;
+  min-width: 100%;
+  box-sizing: border-box;
+  padding: 40px;
+  background: #ffffff;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.about-card h2 {
+  font-size: 2rem;
+  color: #1f4870;
+  margin-bottom: 15px;
+}
+
+.about-card p {
+  font-size: 1.2rem;
+  color: #1f4870;
+  line-height: 1.6;
+  max-width: 80%;
+  margin: auto;
+}
+
+.btn-get-started, .btn-cta, .btn-learn-more {
+  display: inline-block;
+  background: #1f4870;
+  color: white;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-get-started:hover, .btn-cta:hover, .btn-learn-more:hover {
+  background: #163754;
+  transform: scale(1.05);
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.about-navigation {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.nav-dot {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin: 5px;
+  background: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.nav-dot.active {
+  background: #1f4870;
+  transform: scale(1.2);
+}
+
+.about-card#what-we-do {
+  background: #ffffff; /* White background */
+  border-left: 5px solid #1f4870; /* Professional left border */
+  padding: 50px;
+  text-align: left;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  transition: transform 0.3s ease-in-out;
+}
+
+.about-card#what-we-do:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.about-card#what-we-do h2 {
+  font-size: 2rem;
+  color: #1f4870;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.about-card#what-we-do p {
+  font-size: 1.2rem;
+  color: #333;
+  line-height: 1.6;
+  max-width: 85%;
+  margin-bottom: 20px;
+}
+
+.about-card#what-we-do .features {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.about-card#what-we-do .features li {
+  font-size: 1.1rem;
+  color: #1f4870;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  margin-right: -20px;
+}
+
+.about-card#what-we-do .features i {
+  color: #1f4870;
+  margin-right: 10px;
+  font-size: 1.4rem;
+}
+
+/* CTA Button (Get Started) */
+.btn-cta {
+  display: inline-block;
+  background: linear-gradient(135deg, #1f4870, #163754);
+  color: white;
+  padding: 12px 24px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-cta:hover {
+  background: #163754;
+  transform: scale(1.05);
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+</style>
+<!-- ABOUT US SECTION -->
+ <div id="about" class="about-container">
+    <div class="section-title text-center">
+        <h2 class="section-title animate_animated animate_fadeInDown" >
+            About Us
+        </h2>
+    <div class="about-slider-wrapper">
+        <div class="about-slider" id="aboutSlider">
+            <div class="about-card" id="vision">
+                <h2>Our Vision</h2>
+                <p>To create a world where mental health support is accessible to everyone, empowering individuals to lead fulfilling lives with emotional resilience.</p>
+            </div>
+            <div class="about-card" id="mission">
+                <h2>Our Mission</h2>
+                <p>We strive to provide a secure and user-friendly platform that connects individuals with mental health resources, professionals, and self-care tools to enhance their emotional and psychological well-being.</p>
+            </div>
+            <div class="about-card" id="what-we-do">
+                <ul class="features">
+                    <li><i class="bi bi-clock"></i> <strong>24/7 Support:</strong> Get assistance anytime, anywhere.</li>
+                    <li><i class="bi bi-person"></i> <strong>Personalized Guidance:</strong> Expert recommendations tailored to you.</li>
+                    <li><i class="bi bi-heart"></i> <strong>Interactive Tools:</strong> Assessments, journaling, and self-care activities.</li>
+                    <li><i class="bi bi-shield"></i> <strong>Secure & Confidential:</strong> Your privacy and safety are our top priorities.</li>
+                </ul>
+            </div>
+            <div class="about-card cta-box" id="join-us">
+                <h2>Join Us Today!</h2>
+                <p class="join-us">Join <span class="highlight">thousands of users</span> who trust MindCare for their mental well-being.</p>
+                <a href="{% url 'login' %}" class="btn-learn-more">Get Started</a>
+            </div>
+        </div>
+    </div>
+    <div class="about-navigation">
+        <div class="nav-dot" onclick="moveSlider(0)"></div>
+        <div class="nav-dot" onclick="moveSlider(1)"></div>
+        <div class="nav-dot" onclick="moveSlider(2)"></div>
+        <div class="nav-dot" onclick="moveSlider(3)"></div>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 0;
+    function moveSlider(slideIndex) {
+        const slider = document.getElementById("aboutSlider");
+        slider.style.transform = `translateX(-${slideIndex * 100}%)`;
+        document.querySelectorAll(".nav-dot").forEach((dot, index) => {
+            dot.classList.toggle("active", index === slideIndex);
+        });
+        currentSlide = slideIndex;
+    }
+    
+    document.querySelectorAll(".nav-dot").forEach((dot, index) => {
+        dot.addEventListener("click", () => moveSlider(index));
+    });
+    
+    setInterval(() => {
+        currentSlide = (currentSlide + 1) % 4;
+        moveSlider(currentSlide);
+    }, 5000);
+</script>
+
+<!-- Features Section -->
+<section id="features" class="features-section">
+  <div class="container py-5">
+      <div class="section-header text-center mb-5">
+          <h2 class="section-title">Our Features</h2>
+          <p class="subtitle">Tailored mental health support, carefully crafted for you.</p>
+      </div>
+
+      <div class="row justify-content-center">
+          <div class="col-lg-4 col-md-6 mb-4">
+              <div class="feature-box">
+                  <div class="icon mb-3">
+                      <i class="bi bi-heart-pulse-fill"></i>
+                  </div>
+                  <h3 class="feature-title">Personalized Support</h3>
+                  <p class="feature-text">Custom strategies designed around your unique emotions, lifestyle, and mental health goals.</p>
+              </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+              <div class="feature-box">
+                  <div class="icon mb-3">
+                      <i class="bi bi-people-fill"></i>
+                  </div>
+                  <h3 class="feature-title">Community-Driven</h3>
+                  <p class="feature-text">Connect with a supportive community that shares experiences, encouragement, and growth.</p>
+              </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 mb-4">
+              <div class="feature-box">
+                  <div class="icon mb-3">
+                      <i class="bi bi-journal-richtext"></i>
+                  </div>
+                  <h3 class="feature-title">Interactive Content</h3>
+                  <p class="feature-text">Interactive exercises, assessments, and engaging activities crafted to enhance mental wellness.</p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <style>
+      .features-section {
+          padding: 90px 0;
+          background-color: #f7fafc;
+      }
+
+      .section-title {
+          font-size: 2.8rem;
+          font-weight: bold;
+          color: #1f4870;
+      }
+
+      .subtitle {
+          font-size: 1.2rem;
+          color: #6c757d;
+      }
+
+      .highlight {
+          color: #1f4870;
+      }
+
+      .feature-box {
+          background-color: #ffffff;
+          padding: 35px;
+          border-radius: 16px;
+          box-shadow: 0 8px 25px rgba(31, 72, 112, 0.15);
+          transition: transform 0.3s, box-shadow 0.3s;
+          text-align: center;
+          height: 100%;
+      }
+
+      .feature-box:hover {
+          transform: translateY(-15px);
+          box-shadow: 0 15px 30px rgba(31, 72, 112, 0.25);
+      }
+
+      .feature-title {
+          font-size: 1.6rem;
+          color: #1f4870;
+          margin-bottom: 15px;
+          font-weight: 700;
+      }
+
+      .feature-text {
+          font-size: 1rem;
+          color: #6c757d;
+          line-height: 1.6;
+      }
+
+      .icon i {
+          font-size: 3.5rem;
+          color: #1f4870;
+      }
+
+      @media (max-width: 768px) {
+          .feature-box {
+              margin-bottom: 30px;
+          }
+      }
+  </style>
+  <style>
+    .professionals {
+      padding: 100px 0;
+      background: var(--secondary-color);
+      text-align: center;
+  }
+  
+  .professionals .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #1f4870 !important;
+      margin-bottom: 50px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+  }
+  
+  /* Professional Member Card */
+  .member {
+      background: var(--light-text);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease-in-out;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+  }
+  
+  .member img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      transition: transform 0.3s ease-in-out;
+  }
+  
+  .member h4 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-top: 10px;
+  }
+  
+  .member p {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      margin-bottom: 15px;
+  }
+  
+  /* Hover Effects */
+  .member:hover {
+      transform: translateY(-8px);
+      box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.25);
+  }
+  
+  .member:hover img {
+      transform: scale(1.05);
+  }
+  
+  /* Book Appointment Button */
+  .book-appointment-btn {
+      background: var(--primary-color);
+      color: var(--light-text);
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: all 0.3s ease-in-out;
+      border: none;
+      cursor: pointer;
+  }
+  
+  .book-appointment-btn:hover {
+      background: var(--accent-color);
+      color: var(--text-color);
+      transform: scale(1.05);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+      .professionals .section-title {
+          font-size: 2rem;
+      }
+      .member {
+          padding: 30px;
+      }
+  }
+  /* Professionals Section */
+  .professionals {
+    padding: 100px 0;
+    background: var(--secondary-color);
+    text-align: center;
+  }
+  
+  .professionals .section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 50px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  /* Ensuring the paragraph under "Meet Our Professionals" is in small letters */
+  .professionals p {
+    text-transform: none;
+    font-size: 1.1rem;
+    color: var(--text-color);
+  }
+  
+  /* Professional Member Card */
+  .member {
+    background: var(--light-text);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .member img {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .member h4 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-top: 10px;
+  }
+  
+  .member p {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 15px;
+  }
+  
+  /* Hover Effects */
+  .member:hover {
+    transform: translateY(-8px);
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.25);
+  }
+  
+  .member:hover img {
+    transform: scale(1.05);
+  }
+  
+  /* Book Appointment Button */
+  .book-appointment-btn {
+    background: var(--primary-color);
+    color: var(--light-text);
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .book-appointment-btn:hover {
+    background: var(--accent-color);
+    color: var(--text-color);
+    transform: scale(1.05);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .professionals .section-title {
+        font-size: 2rem;
+    }
+    .member {
+        padding: 30px;
+    }
+  }
+  /* Professionals Section */
+  .professionals {
+      padding: 100px 0;
+      background: var(--secondary-color);
+      text-align: center;
+  }
+  
+  .professionals .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary-color);
+      margin-bottom: 50px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+  }
+  
+  /* Ensuring the paragraph under "Meet Our Professionals" is in small letters */
+  .professionals p {
+      text-transform: none;
+      font-size: 1.1rem;
+      color: var(--text-color);
+  }
+  
+  /* Professional Member Card */
+  .member {
+      background: var(--light-text);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s ease-in-out;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+  }
+  
+  .member img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      transition: transform 0.3s ease-in-out;
+  }
+  
+  .member h4 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-top: 10px;
+  }
+  
+  .member p {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      margin-bottom: 15px;
+  }
+  
+  /* Hover Effects */
+  .member:hover {
+      transform: translateY(-8px);
+      box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.25);
+  }
+  
+  .member:hover img {
+      transform: scale(1.05);
+  }
+  
+  /* Book Appointment Button */
+  .book-appointment-btn {
+      background: var(--primary-color);
+      color: var(--light-text);
+      padding: 12px 25px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      transition: all 0.3s ease-in-out;
+      border: none;
+      cursor: pointer;
+  }
+  
+  .book-appointment-btn:hover {
+      background: var(--accent-color);
+      color: var(--text-color);
+      transform: scale(1.05);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+      .professionals .section-title {
+          font-size: 2rem;
+      }
+      .member {
+          padding: 30px;
+      }
+  }
+  
+  /* Appointment Modal */
+  #appointment-modal .modal-content {
+    border-radius: 10px;
+  }
+  
+  #appointment-modal .modal-header {
+    background: var(--primary-color);
+    color: var(--light-text);
+    border-radius: 10px 10px 0 0;
+  }
+  
+  #appointment-modal .btn-close {
+    background: var(--light-text);
+  }
+  
+  #appointment-modal .btn-primary {
+    background: var(--accent-color);
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  #appointment-modal .btn-primary:hover {
+    background: #4100e6;
+  }
+  
+  /* Success Popup */
+  #success-popup {
+    display: none;
+    background: green;
+    color: white;
+    padding: 15px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    border-radius: 5px;
+    z-index: 1000;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  #success-popup a {
+    color: yellow;
+    font-weight: bold;
+  }
+  
+  </style>
+</section>
+
+<!-- PROFESSIONALS SECTION -->
+<section id="professionals" class="professionals">
+    <div class="container" data-aos="fade-up">
+      <div class="section-title">
+        <h2>Meet Our Professionals</h2>
+        <p>Connect with experienced mental health professionals ready to support you.</p>
+      </div>
+  
+      <div class="row">
+        {% for professional in professionals %}
+        <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+          <div class="member">
+            {% if professional.image %}
+              <img src="{{ professional.image.url }}" class="img-fluid" alt="{{ professional.name }}">
+            {% else %}
+              <img src="{% static 'assets/images/default.png' %}" class="img-fluid" alt="Default Image">
+            {% endif %}
+  
+            <h4><a href="{% url 'professional_detail' professional.id %}">{{ professional.name }}</a></h4>
+            <p>{{ professional.specialty }}</p>
+  
+            {% if user.is_authenticated %}
+            <p><strong>Available Slots:</strong></p>
+  <ul id="available-slots-{{ professional.id }}">
+    {% for slot in professional.available_slots %}
+      {% if slot not in professional.booked_slots %}  {# ✅ Hide booked slots #}
+        <li><span style="color: green;">{{ slot }}</span></li>
+      {% endif %}
+    {% empty %}
+      <p class="text-muted">No available slots</p>
+    {% endfor %}
+  </ul>
+  
+  <button class="btn btn-primary book-appointment-btn" 
+  data-professional-id="{{ professional.id }}" 
+  data-professional-name="{{ professional.name }}" 
+  data-specialty="{{ professional.specialty }}"
+  data-available-slots="{{ professional.available_slots|join:',' }}"
+  data-booked-slots="{{ professional.booked_slots|join:',' }}">  <!-- ✅ Add booked slots -->
+  Book Appointment
+  </button>
+  
+            {% endif %}
+          </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No professionals available at the moment.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  
+  <!-- Appointment Booking Modal -->
+  <div id="appointment-modal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Book Appointment</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="appointment-form">
+            {% csrf_token %}
+            <input type="hidden" name="professional" id="modal-professional-id">
+  
+            <p>Booking with: <strong id="modal-professional-name"></strong></p>
+            <p>Specialty: <span id="modal-specialty"></span></p>
+  
+            <div class="mb-3">
+              <label for="date" class="form-label">Select Date:</label>
+              <input type="date" class="form-control" name="date" id="appointment-date" required>
+            </div>
+  
+            <div class="mb-3">
+              <label for="time" class="form-label">Select Time:</label>
+              <select class="form-select" name="time" id="appointment-time" required>
+              </select>
+            </div>
+  
+            <div class="mb-3">
+              <label for="reason" class="form-label">Reason:</label>
+              <textarea class="form-control" name="reason" placeholder="Enter appointment reason" required></textarea>
+            </div>
+  
+            <button type="submit" class="btn btn-primary w-100">Confirm Appointment</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Success Message -->
+  <div id="success-popup" style="display: none; background: green; color: white; padding: 15px; position: fixed; top: 20px; right: 20px; border-radius: 5px; z-index: 1000;">
+    Appointment confirmed! A Google Meet link has been sent to your email.  
+    <br>
+    <a id="meet-link" href="#" style="color: yellow; font-weight: bold;" target="_blank"></a>
+  </div>
+{% endblock %}
