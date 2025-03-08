@@ -15,7 +15,6 @@ from django.db import models
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from googletrans import Translator
 import logging
 from django.utils.translation import activate, get_language
 from django.utils import translation
@@ -1256,20 +1255,6 @@ from myapp.utils.email_utils import send_email_async
 def some_function():
     from myapp.utils.email_utils import send_email_async  # ✅ Import inside function
     send_email_async("user@example.com", "Test Subject", "Hello World!")
-
-from django.http import JsonResponse
-from googletrans import Translator
-
-def translate_text(text, target_language):
-    """
-    Function to translate text using Google Translate API or another translation method.
-    """
-    from googletrans import Translator  # Ensure googletrans is installed (`pip install googletrans==4.0.0-rc1`)
-    
-    translator = Translator()
-    translated = translator.translate(text, dest=target_language)
-    
-    return translated.text
 
 
 def settings_view(request):

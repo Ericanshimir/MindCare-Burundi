@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import cancel_appointment_by_professional, change_language, clear_notificationsss, delete_quiz, edit_quiz, fetch_notifications, fetch_updates, language_settings, professionals_list, quizzes, remove_appointment, translate_page, translate_text, translate_view, update_availability, upload_quiz
+from .views import cancel_appointment_by_professional, change_language, clear_notificationsss, delete_quiz, edit_quiz, fetch_notifications, fetch_updates, language_settings, professionals_list, quizzes, remove_appointment, translate_page, translate_view, update_availability, upload_quiz
 from .views import index, appointment_success
 from .views import book_appointment
 from django.shortcuts import render
