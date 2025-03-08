@@ -29,7 +29,7 @@ https://youtu.be/vzFGay0NITA
 https://mindcare-burundi.onrender.com
 
 
-### Steps to Run the App
+### Steps to Run the App Locally
 1. **Clone the Repository**
    ```sh
    git clone https://github.com/Ericanshimir/MindCare.git
