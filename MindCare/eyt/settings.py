@@ -31,6 +31,7 @@ APPEND_SLASH = False
 
 
 ALLOWED_HOSTS = [
+    'mindcare-burundi.onrender.com'
     'mindcare-s6rs.onrender.com',
     'localhost',
     '127.0.0.1',
