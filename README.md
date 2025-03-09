@@ -18,7 +18,7 @@ MindCare is a comprehensive mental health platform designed to support users in 
   
 # Screenshots of the app interface can be found this the **designs folder** of this repository
 
-https://github.com/Ericanshimir/MindCare/tree/main/MindCare/designs
+https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
 
 # Link to the demo of MindCare App.
 
