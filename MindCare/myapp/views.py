@@ -1616,12 +1616,3 @@ def check_user_role(request):
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
-
-@staff_member_required
-def list_superusers(request):
-    superusers = User.objects.filter(is_superuser=True).values_list('username', 'email')
-    output = "Superusers:\n"
-    for username, email in superusers:
-        output += f"Username: {username}, Email: {email}\n"
-    return HttpResponse(f"<pre>{output}</pre>")
-
