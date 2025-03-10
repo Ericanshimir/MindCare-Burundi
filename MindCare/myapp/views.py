@@ -1092,8 +1092,13 @@ def get_quiz_details(request, quiz_id):
 
 @receiver(post_save, sender=User)
 def create_professional_profile(sender, instance, created, **kwargs):
-    if created and instance.is_staff:  # Assuming professionals are staff users
-        Professional.objects.get_or_create(user=instance, name=instance.username, contact_email=instance.email)
+    # Only create Professional profiles for staff users who are NOT superusers
+    if created and instance.is_staff and not instance.is_superuser:
+        Professional.objects.get_or_create(
+            user=instance, 
+            name=instance.username, 
+            contact_email=instance.email
+        )
 
 
 @login_required
