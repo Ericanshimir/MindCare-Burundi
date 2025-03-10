@@ -87,6 +87,12 @@
         <a href="{% url 'quizzes' %}" id="mental-health-quizzes">📝 Mental Health Quizzes</a>
         <a href="{% url 'training_materials' %}" id="training-materials">📚 Training Materials</a>
         <a href="{% url 'settings_professional' %}" id="settings-link"><i class="fas fa-cogs"></i> Settings</a>
+         <!-- Add this after the existing sidebar links, before the logout link -->
+{% if user.is_superuser %}
+<a href="{% url 'manage_professionals' %}" id="manage-professionals-link">
+    <i class="fas fa-users-cog"></i> Manage Professionals
+</a>
+{% endif %}          
         <a href="{% url 'logout' %}" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 

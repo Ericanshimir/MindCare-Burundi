@@ -1,0 +1,506 @@
+{% load static %}
+{% block content %}
+<style>
+    /* Custom styling for the form */
+    .professional-form-container {
+        max-width: 900px;
+        margin: 2rem auto;
+        font-family: 'Poppins', sans-serif;
+    }
+    
+    .professional-card {
+        border-radius: 12px;
+        box-shadow: 0 6px 15px rgba(31, 72, 112, 0.15);
+        border: none;
+        overflow: hidden;
+    }
+    
+    .professional-header {
+        background-color: #1f4870;
+        color: white;
+        padding: 1.5rem;
+        border-bottom: none;
+    }
+    
+    .professional-header h3 {
+        margin: 0;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .professional-body {
+        padding: 2rem;
+        background-color: #f8fafc;
+    }
+    
+    .form-label {
+        font-weight: 500;
+        color: #1f4870;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control {
+        border-radius: 8px;
+        padding: 0.75rem;
+        border: 1px solid #cfd8e3;
+        transition: all 0.3s ease;
+    }
+    
+    .form-control:focus {
+        border-color: #1f4870;
+        box-shadow: 0 0 0 0.25rem rgba(31, 72, 112, 0.25);
+    }
+    
+    .input-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    
+    .required-field::after {
+        content: "*";
+        color: #dc3545;
+        margin-left: 4px;
+    }
+    
+    .btn {
+        border-radius: 8px;
+        padding: 0.625rem 1.25rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-back {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+    
+    .btn-back:hover {
+        background-color: #5a6268;
+    }
+    
+    .btn-create {
+        background-color: #1f4870;
+        color: white;
+        border: none;
+    }
+    
+    .btn-create:hover {
+        background-color: #163553;
+    }
+    
+    .btn i {
+        margin-right: 0.5rem;
+    }
+    
+    .alert {
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Form section styling */
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 1rem;
+    }
+    
+    /* Image upload styles */
+    .image-upload-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .image-preview {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 3px solid #1f4870;
+        background-color: #e2e8f0;
+    }
+    
+    .image-preview-placeholder {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        color: #6c757d;
+        font-size: 3rem;
+    }
+    
+    .custom-file-upload {
+        cursor: pointer;
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: #f8f9fa;
+        border: 1px solid #cfd8e3;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .custom-file-upload:hover {
+        background-color: #e9ecef;
+    }
+    
+    /* Available slots styles */
+    .slots-container {
+        border: 1px solid #cfd8e3;
+        border-radius: 8px;
+        padding: 1rem;
+        max-height: 250px;
+        overflow-y: auto;
+        margin-bottom: 1rem;
+        background-color: white;
+    }
+    
+    .slot-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        background-color: #f1f5f9;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+    }
+    
+    .slot-item:hover {
+        background-color: #e9ecef;
+    }
+    
+    .slot-item:last-child {
+        margin-bottom: 0;
+    }
+    
+    .slot-delete-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 0;
+        font-size: 12px;
+    }
+    
+    .slot-delete-btn:hover {
+        background-color: #c82333;
+    }
+    
+    .slot-time-picker {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 1rem;
+    }
+    
+    .slot-time-picker .form-control {
+        flex: 1;
+    }
+    
+    .add-slot-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        padding: 0.75rem;
+        transition: all 0.3s ease;
+    }
+    
+    .add-slot-btn:hover {
+        background-color: #218838;
+    }
+    
+    .empty-slots-message {
+        text-align: center;
+        color: #6c757d;
+        padding: 1rem 0;
+        font-style: italic;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .professional-body {
+            padding: 1.5rem;
+        }
+        
+        .form-row [class*="col-"] {
+            margin-bottom: 1rem;
+        }
+        
+        .slot-time-picker {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="professional-form-container">
+    <div class="professional-card">
+        <div class="professional-header">
+            <h3><i class="fas fa-user-plus"></i> Add New Professional</h3>
+        </div>
+        <div class="professional-body">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="POST" action="{% url 'add_professional' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <h5 class="mb-3">Account Information</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label for="username" class="form-label required-field">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label for="password" class="form-label required-field">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h5 class="mb-3">Professional Details</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label for="name" class="form-label required-field">Full Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter full name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label for="specialty" class="form-label required-field">Specialty</label>
+                                <input type="text" class="form-control" id="specialty" name="specialty" placeholder="Enter specialty" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Profile Image Upload -->
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <label class="form-label">Profile Image</label>
+                            <div class="image-upload-area">
+                                <div class="image-preview-placeholder" id="imagePreviewContainer">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <label class="custom-file-upload">
+                                    <input type="file" name="image" id="imageInput" style="display:none;" accept="image/*">
+                                    <i class="fas fa-upload"></i> Choose Image
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h5 class="mb-3">Contact Information</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label for="email" class="form-label required-field">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email address" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <label for="phone_number" class="form-label required-field">Phone Number</label>
+                                <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Enter phone number" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Available Slots Section -->
+                <div class="form-section">
+                    <h5 class="mb-3">Available Slots</h5>
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Slot picker -->
+                            <div class="slot-time-picker">
+                                <input type="date" class="form-control" id="slotDate" min="{{ today|date:'Y-m-d' }}">
+                                <input type="time" class="form-control" id="slotTime">
+                                <button type="button" class="add-slot-btn" id="addSlotBtn">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Slots list -->
+                            <div class="slots-container" id="slotsContainer">
+                                <div class="empty-slots-message" id="emptySlotMessage">
+                                    No available slots added yet
+                                </div>
+                                <!-- Slots will be added here dynamically -->
+                            </div>
+                            
+                            <!-- Hidden input to store JSON array of slots -->
+                            <input type="hidden" name="available_slots" id="availableSlotsInput" value="[]">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'manage_professionals' %}" class="btn btn-back">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-create">
+                        <i class="fas fa-save"></i> Create Professional
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Image preview functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageInput = document.getElementById('imageInput');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        
+        imageInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const imageUrl = URL.createObjectURL(file);
+                
+                // Remove placeholder icon and create image element
+                imagePreviewContainer.innerHTML = '';
+                imagePreviewContainer.classList.remove('image-preview-placeholder');
+                
+                const imgElement = document.createElement('img');
+                imgElement.src = imageUrl;
+                imgElement.className = 'image-preview';
+                
+                imagePreviewContainer.appendChild(imgElement);
+            }
+        });
+        
+        // Available slots functionality
+        const addSlotBtn = document.getElementById('addSlotBtn');
+        const slotDate = document.getElementById('slotDate');
+        const slotTime = document.getElementById('slotTime');
+        const slotsContainer = document.getElementById('slotsContainer');
+        const emptySlotMessage = document.getElementById('emptySlotMessage');
+        const availableSlotsInput = document.getElementById('availableSlotsInput');
+        
+        // Initialize available slots array
+        let availableSlots = [];
+        
+        // Set min date to today
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        slotDate.min = `${year}-${month}-${day}`;
+        
+        // Add slot function
+        addSlotBtn.addEventListener('click', function() {
+            const date = slotDate.value;
+            const time = slotTime.value;
+            
+            if (!date || !time) {
+                alert('Please select both date and time for the available slot');
+                return;
+            }
+            
+            // Format the slot datetime
+            const slotDateTime = `${date} ${time}`;
+            
+            // Check if slot already exists
+            if (availableSlots.includes(slotDateTime)) {
+                alert('This slot has already been added');
+                return;
+            }
+            
+            // Add to our array
+            availableSlots.push(slotDateTime);
+            updateSlotsInput();
+            
+            // Hide empty message if showing
+            if (emptySlotMessage.style.display !== 'none') {
+                emptySlotMessage.style.display = 'none';
+            }
+            
+            // Create new slot item
+            const slotItem = document.createElement('div');
+            slotItem.className = 'slot-item';
+            slotItem.dataset.slot = slotDateTime;
+            
+            const formattedDate = new Date(date + 'T' + time).toLocaleString();
+            
+            slotItem.innerHTML = `
+                <span>${formattedDate}</span>
+                <button type="button" class="slot-delete-btn" data-slot="${slotDateTime}">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            slotsContainer.appendChild(slotItem);
+            
+            // Clear time input for next slot
+            slotTime.value = '';
+        });
+        
+        // Delete slot (using event delegation)
+        slotsContainer.addEventListener('click', function(e) {
+            if (e.target.closest('.slot-delete-btn')) {
+                const button = e.target.closest('.slot-delete-btn');
+                const slotDateTime = button.dataset.slot;
+                const slotItem = button.closest('.slot-item');
+                
+                // Remove from array
+                const index = availableSlots.indexOf(slotDateTime);
+                if (index > -1) {
+                    availableSlots.splice(index, 1);
+                    updateSlotsInput();
+                }
+                
+                // Remove from DOM
+                slotItem.remove();
+                
+                // Show empty message if no slots
+                if (availableSlots.length === 0) {
+                    emptySlotMessage.style.display = 'block';
+                }
+            }
+        });
+        
+        // Update hidden input with current slots
+        function updateSlotsInput() {
+            availableSlotsInput.value = JSON.stringify(availableSlots);
+        }
+    });
+</script>
+{% endblock %}

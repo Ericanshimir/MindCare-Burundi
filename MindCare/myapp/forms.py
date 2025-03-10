@@ -20,10 +20,16 @@ class MentorshipApplicationForm(forms.ModelForm):
 from django import forms
 from .models import Professional
 
+from django import forms
+from .models import Professional
+
 class ProfessionalForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput(), required=False, 
+                              help_text="Leave empty to keep current password")
+    
     class Meta:
         model = Professional
-        fields = ['name', 'image', 'specialty', 'contact_email', 'phone_number']  # Ensure these exist in models.py
+        fields = ['name', 'specialty', 'contact_email', 'phone_number']
 
 
 from myapp.models import Professional

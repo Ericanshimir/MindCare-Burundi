@@ -318,3 +318,5 @@ class QuizResult(models.Model):
 
     def percentage(self):
         return (self.score / self.total_questions) * 100
+
+

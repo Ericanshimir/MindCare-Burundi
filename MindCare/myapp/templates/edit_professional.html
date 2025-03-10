@@ -1,0 +1,276 @@
+{% load static %}  
+{% block content %}
+<style>
+    /* Custom styling for professional management pages */
+    .pro-card {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(31, 72, 112, 0.15);
+        margin-bottom: 30px;
+    }
+
+    .pro-card-header {
+        background-color: #1f4870;
+        color: white;
+        border-radius: 8px 8px 0 0 !important;
+        padding: 15px 20px;
+    }
+
+    .pro-card-header h3 {
+        margin-bottom: 0;
+        font-weight: 600;
+        font-size: 1.4rem;
+    }
+
+    .pro-card-body {
+        padding: 25px;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #2d3748;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #1f4870;
+        box-shadow: 0 0 0 3px rgba(31, 72, 112, 0.15);
+    }
+
+    .form-control:read-only {
+        background-color: #f8fafc;
+    }
+
+    .text-muted {
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+
+    .alert {
+        border-radius: 6px;
+        margin-bottom: 20px;
+        padding: 12px 20px;
+    }
+
+    .btn {
+        border-radius: 6px;
+        font-weight: 500;
+        padding: 10px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-secondary {
+        background-color: #718096;
+        border: none;
+    }
+
+    .btn-secondary:hover {
+        background-color: #4a5568;
+    }
+
+    .btn-primary {
+        background-color: #1f4870;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #2a5d8f;
+    }
+
+    /* Required field indicator */
+    .required-field::after {
+        content: "*";
+        color: #e53e3e;
+        margin-left: 3px;
+    }
+   
+/* Image upload styles */
+.image-upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.image-preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 1rem;
+    border: 3px solid #1f4870;
+    background-color: #e2e8f0;
+}
+
+.image-preview-placeholder {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    color: #6c757d;
+    font-size: 3rem;
+}
+
+.custom-file-upload {
+    cursor: pointer;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #cfd8e3;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.custom-file-upload:hover {
+    background-color: #e9ecef;
+}
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .form-action-buttons {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-action-buttons .btn {
+            width: 100%;
+        }
+    }
+    
+</style>
+
+<div class="container mt-4">
+    <div class="card pro-card">
+        <div class="card-header pro-card-header">
+            <h3><i class="fas fa-user-edit"></i> Edit Professional</h3>
+        </div>
+        <div class="card-body pro-card-body">
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            
+            <form method="POST" action="{% url 'edit_professional' professional.id %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" value="{{ professional.user.username }}" readonly>
+                        <small class="text-muted">Username cannot be changed</small>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                        <small class="text-muted">Leave empty to keep current password</small>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label">Full Name*</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ professional.name }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="specialty" class="form-label">Specialty*</label>
+                        <input type="text" class="form-control" id="specialty" name="specialty" value="{{ professional.specialty }}" required>
+                    </div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <label for="contact_email" class="form-label">Email*</label>
+                        <input type="email" class="form-control" id="contact_email" name="contact_email" value="{{ professional.contact_email }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="phone_number" class="form-label">Phone Number*</label>
+                        <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ professional.phone_number }}" required>
+                    </div>
+                </div>
+                <!-- Add this after the contact_email and phone_number section -->
+<div class="row mb-4">
+  <div class="col-12">
+      <label class="form-label">Profile Image</label>
+      <div class="image-upload-area">
+          <div id="imagePreviewContainer" {% if professional.image %}style="display:none"{% endif %} class="image-preview-placeholder">
+              <i class="fas fa-user"></i>
+          </div>
+          {% if professional.image %}
+              <img src="{{ professional.image.url }}" class="image-preview" id="currentImage">
+          {% endif %}
+          <label class="custom-file-upload">
+              <input type="file" name="image" id="imageInput" style="display:none;" accept="image/*">
+              <i class="fas fa-upload"></i> Choose Image
+          </label>
+      </div>
+  </div>
+</div>
+                <div class="d-flex justify-content-between form-action-buttons mt-4">
+                    <a href="{% url 'manage_professionals' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Update Professional
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Add this before the closing </div> of the pro-card-body div -->
+<script>
+  // Image preview functionality
+  document.addEventListener('DOMContentLoaded', function() {
+      const imageInput = document.getElementById('imageInput');
+      const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+      const currentImage = document.getElementById('currentImage');
+      
+      imageInput.addEventListener('change', function(e) {
+          if (e.target.files.length > 0) {
+              const file = e.target.files[0];
+              const imageUrl = URL.createObjectURL(file);
+              
+              // Hide placeholder icon and current image
+              if (imagePreviewContainer) {
+                  imagePreviewContainer.style.display = 'none';
+              }
+              if (currentImage) {
+                  currentImage.style.display = 'none';
+              }
+              
+              // Create new image preview if it doesn't exist
+              if (!document.querySelector('.image-preview-new')) {
+                  const imgElement = document.createElement('img');
+                  imgElement.src = imageUrl;
+                  imgElement.className = 'image-preview image-preview-new';
+                  
+                  // Insert before the file upload button
+                  const fileUploadLabel = document.querySelector('.custom-file-upload');
+                  fileUploadLabel.parentNode.insertBefore(imgElement, fileUploadLabel);
+              } else {
+                  // Update existing preview
+                  document.querySelector('.image-preview-new').src = imageUrl;
+              }
+          }
+      });
+  });
+</script>
+{% endblock %}

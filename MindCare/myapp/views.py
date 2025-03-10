@@ -781,10 +781,10 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            # User credentials are valid - proceed with login regardless of role
+            # User credentials are valid - proceed with login
             login(request, user)
             
-            # Redirect based on the selected role, not based on what's in the database
+            # Check role selection and redirect accordingly
             if role == 'professional':
                 # Check if professional record exists, create one if it doesn't
                 professional, created = Professional.objects.get_or_create(
@@ -1616,3 +1616,243 @@ def check_user_role(request):
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
+
+
+from django.contrib.auth.decorators import user_passes_test
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.models import User
+from .models import Professional
+from .forms import ProfessionalForm  # You'll need to create this form
+
+# Decorator to ensure only superusers can access these views
+def superuser_required(view_func):
+    decorated_view = user_passes_test(lambda u: u.is_superuser)(view_func)
+    return decorated_view
+
+@superuser_required
+def manage_professionals(request):
+    professionals = Professional.objects.all().order_by('name')
+    return render(request, 'manage_professionals.html', {'professionals': professionals})
+
+@superuser_required
+def add_professional(request):
+    if request.method == 'POST':
+        # First create the user account
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        
+        # Check if username already exists
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists')
+            return redirect('add_professional')
+        
+        # Create the user
+        user = User.objects.create_user(username=username, email=email, password=password)
+        
+        # Now create the professional profile
+        professional = Professional(
+            user=user,
+            name=request.POST.get('name'),
+            specialty=request.POST.get('specialty'),
+            contact_email=email,
+            phone_number=request.POST.get('phone_number')
+        )
+        
+        # Handle the image upload
+        if 'image' in request.FILES:
+            professional.image = request.FILES['image']
+            
+        professional.save()
+        
+        messages.success(request, f'Professional {professional.name} created successfully')
+        return redirect('manage_professionals')
+    
+    return render(request, 'add_professional.html')
+
+@superuser_required
+def edit_professional(request, professional_id):
+    professional = get_object_or_404(Professional, id=professional_id)
+    
+    if request.method == 'POST':
+        # Update professional details
+        professional.name = request.POST.get('name')
+        professional.specialty = request.POST.get('specialty')
+        professional.contact_email = request.POST.get('contact_email')
+        professional.phone_number = request.POST.get('phone_number')
+        
+        # Handle image upload
+        if 'image' in request.FILES:
+            professional.image = request.FILES['image']
+            
+        professional.save()
+        
+        # Update user details if needed
+        user = professional.user
+        user.email = request.POST.get('contact_email')
+        
+        # Only update password if a new one is provided
+        new_password = request.POST.get('password')
+        if new_password:
+            user.set_password(new_password)
+        
+        user.save()
+        
+        messages.success(request, f'Professional {professional.name} updated successfully')
+        return redirect('manage_professionals')
+    
+    return render(request, 'edit_professional.html', {'professional': professional})
+@superuser_required
+def delete_professional(request, professional_id):
+    professional = get_object_or_404(Professional, id=professional_id)
+    user = professional.user
+    
+    if request.method == 'POST':
+        # Delete the professional profile
+        professional_name = professional.name
+        professional.delete()
+        
+        # Optionally delete the user account too
+        # Uncomment the line below if you want to delete the user account
+        user.delete()
+        
+        messages.success(request, f'Professional {professional_name} deleted successfully')
+        return redirect('manage_professionals')
+    
+    return render(request, 'confirm_delete_professional.html', {'professional': professional})
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth import authenticate, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+from .models import Professional
+
+@login_required
+def manage_professional_account(request):
+    """
+    View for professionals to manage their account information
+    """
+    # Get the professional profile associated with the logged-in user
+    try:
+        professional = Professional.objects.get(user=request.user)
+    except Professional.DoesNotExist:
+        return HttpResponseForbidden("You don't have a professional account")
+    
+    context = {
+        'professional': professional
+    }
+    return render(request, 'manage_professional_account.html', context)
+
+@login_required
+def update_professional_profile(request):
+    """
+    Update professional profile information
+    """
+    if request.method != 'POST':
+        return redirect('manage_professional_account')
+    
+    try:
+        professional = Professional.objects.get(user=request.user)
+    except Professional.DoesNotExist:
+        return HttpResponseForbidden("You don't have a professional account")
+    
+    # Update profile information
+    professional.name = request.POST.get('name')
+    professional.specialty = request.POST.get('specialty')
+    professional.contact_email = request.POST.get('contact_email')
+    professional.phone_number = request.POST.get('phone_number')
+    
+    # Handle profile image upload
+    if request.FILES.get('image'):
+        professional.image = request.FILES.get('image')
+    
+    professional.save()
+    messages.success(request, "Profile updated successfully")
+    return redirect('manage_professional_account')
+
+@login_required
+def update_professional_slots(request):
+    """
+    Update professional available slots
+    """
+    if request.method != 'POST':
+        return redirect('manage_professional_account')
+    
+    try:
+        professional = Professional.objects.get(user=request.user)
+    except Professional.DoesNotExist:
+        return HttpResponseForbidden("You don't have a professional account")
+    
+    # Get all slots from the form
+    slots = request.POST.getlist('slots[]')
+    
+    # Update slots
+    professional.available_slots = slots
+    professional.save()
+    
+    messages.success(request, "Appointment slots updated successfully")
+    return redirect('manage_professional_account')
+
+@login_required
+def change_professional_password(request):
+    """
+    Change professional user password
+    """
+    if request.method != 'POST':
+        return redirect('manage_professional_account')
+    
+    current_password = request.POST.get('current_password')
+    new_password = request.POST.get('new_password')
+    confirm_password = request.POST.get('confirm_password')
+    
+    # Verify current password
+    user = authenticate(username=request.user.username, password=current_password)
+    if not user:
+        messages.error(request, "Current password is incorrect")
+        return redirect('manage_professional_account')
+    
+    # Check if new passwords match
+    if new_password != confirm_password:
+        messages.error(request, "New passwords don't match")
+        return redirect('manage_professional_account')
+    
+    # Update password
+    user.set_password(new_password)
+    user.save()
+    
+    # Update the session to prevent user from being logged out
+    update_session_auth_hash(request, user)
+    
+    messages.success(request, "Password changed successfully")
+    return redirect('manage_professional_account')
+
+@login_required
+def delete_professional_account(request):
+    """
+    Delete professional account
+    """
+    if request.method != 'POST':
+        return redirect('manage_professional_account')
+    
+    try:
+        professional = Professional.objects.get(user=request.user)
+    except Professional.DoesNotExist:
+        return HttpResponseForbidden("You don't have a professional account")
+    
+    # Verify password
+    password = request.POST.get('password_confirm')
+    user = authenticate(username=request.user.username, password=password)
+    
+    if not user:
+        messages.error(request, "Password is incorrect")
+        return redirect('manage_professional_account')
+    
+    # Delete the professional and user
+    user = professional.user
+    professional.delete()
+    user.delete()
+    
+    messages.success(request, "Your account has been deleted")
+    return redirect('login')  # Redirect to login page after account deletion

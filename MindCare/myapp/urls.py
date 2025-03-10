@@ -92,6 +92,10 @@ urlpatterns = [
     path('quizzes/edit/<int:quiz_id>/', edit_quiz, name='edit_quiz'),  # Edit Quiz URL
     path('quizzes/delete/<int:quiz_id>/', delete_quiz, name='delete_quiz'),  # Delete Quiz URL
     path('check_user_role/', views.check_user_role, name='check_user_role'),
+    path('manage-professionals/', views.manage_professionals, name='manage_professionals'),
+    path('manage-professionals/add/', views.add_professional, name='add_professional'),
+    path('manage-professionals/edit/<int:professional_id>/', views.edit_professional, name='edit_professional'),
+    path('manage-professionals/delete/<int:professional_id>/', views.delete_professional, name='delete_professional'),
     
     
 
