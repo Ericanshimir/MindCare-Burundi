@@ -32,12 +32,26 @@ else
     mkdir -p media/videos
     mkdir -p media/books
     chmod -R 755 media
-fi
-
+fi 
 
 echo "Applying migrations..."
 python manage.py migrate --noinput || {
     echo "Migration failed, but continuing..."
 }
+
+echo "Creating superuser..."
+python manage.py shell << PYTHON_SCRIPT
+from django.contrib.auth import get_user_model
+User = get_user_model()
+if not User.objects.filter(username='${SUPERUSER_USERNAME:-admin}').exists():
+    User.objects.create_superuser(
+        username='${SUPERUSER_USERNAME:-admin}',
+        email='${SUPERUSER_EMAIL:-admin@example.com}',
+        password='${SUPERUSER_PASSWORD:-admin123}'
+    )
+    print("Superuser created successfully")
+else:
+    print("Superuser already exists")
+PYTHON_SCRIPT
 
 echo "Build completed!"
