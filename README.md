@@ -19,7 +19,7 @@ MindCare is a comprehensive mental health platform designed to support users in 
 
 # Link to the demo of MindCare App.
 
-https://youtu.be/YQETelcQRpM
+https://youtu.be/sWvQSMP69EI
 
 # Link to the deployed version of MindCare App
 
