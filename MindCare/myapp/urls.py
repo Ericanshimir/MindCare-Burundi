@@ -93,6 +93,7 @@ urlpatterns = [
     path('quizzes/delete/<int:quiz_id>/', delete_quiz, name='delete_quiz'),  # Delete Quiz URL
     path('check_user_role/', views.check_user_role, name='check_user_role'),
     
+    
 
 
    

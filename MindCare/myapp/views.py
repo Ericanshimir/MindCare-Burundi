@@ -1607,3 +1607,4 @@ def check_user_role(request):
         return JsonResponse({'exists': False})
     
     return JsonResponse({'error': 'Invalid request method'}, status=400)
+
