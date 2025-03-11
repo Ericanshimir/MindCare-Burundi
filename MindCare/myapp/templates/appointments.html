@@ -60,6 +60,12 @@
         color: green;
         font-weight: bold;
     }
+    
+    /* New style for canceled status */
+    .status-canceled {
+        color: #ff8c00; /* Orange color */
+        font-weight: bold;
+    }
 
     .alert {
         font-size: 1.2em;
@@ -149,7 +155,9 @@
                         <td>{{ appointment.date }}</td>
                         <td>{{ appointment.time }}</td>
                         <td>
-                            {% if appointment.date < today %}
+                            {% if appointment.is_canceled %}
+                                <span class="status-canceled">Canceled</span>
+                            {% elif appointment.date < today %}
                                 <span class="status-past">Past</span>
                             {% else %}
                                 <span class="status-upcoming">Upcoming</span>
@@ -191,4 +199,3 @@
         }
     }
 </script>
-
