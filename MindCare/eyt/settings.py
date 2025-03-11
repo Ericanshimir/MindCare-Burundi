@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from django.utils.translation import gettext_lazy as _
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -180,15 +183,11 @@ LOCALE_PATHS = [
 ]
 
 # Security settings
-#SECURE_SSL_REDIRECT = True
-##SESSION_COOKIE_SECURE = True
-# = True
-#SECURE_BROWSER_XSS_FILTER = True
-#SECURE_CONTENT_TYPE_NOSNIFF = True
-#X_FRAME_OPTIONS = 'DENY'
-
-# Security settings - completely disabled for debugging
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SECURE = False
-SECURE_PROXY_SSL_HEADER = None  # Add this line
+if not DEBUG:  # Only use in production
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+else:  # Development settings
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False

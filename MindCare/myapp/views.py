@@ -1657,7 +1657,8 @@ def add_professional(request):
             name=request.POST.get('name'),
             specialty=request.POST.get('specialty'),
             contact_email=email,
-            phone_number=request.POST.get('phone_number')
+            phone_number=request.POST.get('phone_number'),
+            is_admin_account=request.POST.get('is_admin_account') == 'on'  # Add checkbox value
         )
         
         # Handle the image upload
@@ -1681,6 +1682,7 @@ def edit_professional(request, professional_id):
         professional.specialty = request.POST.get('specialty')
         professional.contact_email = request.POST.get('contact_email')
         professional.phone_number = request.POST.get('phone_number')
+        professional.is_admin_account = request.POST.get('is_admin_account') == 'on'  # Add this line
         
         # Handle image upload
         if 'image' in request.FILES:

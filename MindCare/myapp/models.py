@@ -260,6 +260,7 @@ class Professional(models.Model):
     image = models.ImageField(upload_to='professionals/', null=True, blank=True)
     available_slots = models.JSONField(default=list)
     booked_slots = models.JSONField(default=list)
+    is_admin_account = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
