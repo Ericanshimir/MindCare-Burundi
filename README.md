@@ -111,7 +111,8 @@ Visit the deployed app https://mindcare-burundi.onrender.com.
 **Consult Professionals:** Book appointments with experts.
 
 
-🛠️# Steps to Run the App Locally
+# Steps to Run the App Locally
+
 **1. Clone the Repository**
    ```sh
    https://github.com/Ericanshimir/MindCare-Burundi.git
