@@ -157,40 +157,7 @@ https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
 
 9. # Project structure
 
-    MindCare-Burundi/
-│── app.py                      # Main application entry point
-│── env/                         # Environment-related configurations
-│── eyt/                         # Application-specific logic (Unclear purpose)
-│── MindCare/                    # Core Django project directory
-│   ├── chat/                    # Chat-related functionalities
-│   ├── designs/                 # UI/UX design files (if applicable)
-│   ├── env/                     # Environment configurations
-│   ├── eyt/                     # Application module
-│   │   ├── __pycache__/         # Compiled Python files
-│   │   ├── __init__.py          # Package initialization
-│   │   ├── settings.py          # Django project settings
-│   │   ├── urls.py              # URL routing
-│   │   ├── vercel.json          # Deployment configuration for Vercel
-│   │   ├── wsgi.py              # WSGI entry point for the Django app
-│── db.sqlite3                    # SQLite database file (Not included in Git)
-│── locale/                      # Localization files for translations
-│── media/                       # User-uploaded media files
-│   ├── books/                   # Books-related media
-│   ├── professionals/           # Professional user-related media
-│   ├── video/                   # Video files
-│   ├── videos/                  # Additional video storage
-│── myapp/                       # Django application module
-│   ├── __pycache__/             # Compiled Python files
-│   ├── locale/                  # Localization files
-│   ├── migrations/              # Django migrations
-│   ├── templates/               # Frontend templates
-│   │   ├── myapp/               # Templates for core app
-│   │   ├── professionals/       # Templates for professionals section
-│   │   ├── about.html           # About page template
-│── Static/                     # Static frontend (HTML, CSS, JS)
-│   ├── styles.css               # Stylesheet
-│   ├── script.js                # JavaScript logic
-│   ├── assets/                  # Images and icons
+![image](https://github.com/user-attachments/assets/810da61f-24d3-4e23-8ec5-ed7ab1163001)
 
 
 ## Contribution
