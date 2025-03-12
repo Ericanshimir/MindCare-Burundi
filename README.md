@@ -156,10 +156,7 @@ https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
 **Community Forum**: This is where the users and professional they will interact.
 
 9. # Project structure
-
-![image](https://github.com/user-attachments/assets/810da61f-24d3-4e23-8ec5-ed7ab1163001)
-
-
+    
 ## Contribution
 To contribute:
 1. Fork the repository.
