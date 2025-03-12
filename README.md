@@ -149,43 +149,57 @@ python manage.py createsuperuser
 
 ### **Project Structure**
 
-| **Directory/File**       | **Description** |
-|-------------------------|--------------------------------------------------|
-| `MindCare/`            | Main Django project folder (settings, URLs, WSGI) |
-| `eyt/`                 | Subdirectory containing configurations |
-| `eyt/settings.py`      | Django settings file |
-| `eyt/__init__.py`      | Initializes the `eyt` package |
-| `eyt/other_files.py`   | Placeholder for configuration or utility files |
-| `manage.py`            | Django management script |
-| `db.sqlite3`           | SQLite database file |
-| `requirements.txt`     | Python dependencies |
-| `render.yaml`          | Render deployment configuration |
-| `build.sh`             | Shell script for deployment |
-| `.env` (not included in Git) | Stores secret keys and environment variables |
-| `media/`              | Uploaded files (books, professionals, videos) |
-| `media/books/`        | Uploaded book files |
-| `media/professionals/`| Media related to professionals |
-| `media/videos/`       | Uploaded video content |
-| `myapp/`              | Django application directory |
-| `myapp/__init__.py`   | Initializes the application package |
-| `myapp/admin.py`      | Admin site configurations |
-| `myapp/apps.py`       | Application configuration |
-| `myapp/models.py`     | Data models for the application |
-| `myapp/tests.py`      | Test cases for the application |
-| `myapp/views.py`      | Application views and logic |
-| `myapp/migrations/`   | Database migration files |
-| `myapp/templates/`    | HTML templates for the application |
-| `myapp/templates/myapp/` | Templates specific to the core application |
-| `myapp/templates/professionals/` | Templates for professionals section |
-| `myapp/static/`       | Static files (CSS, JavaScript, images) |
-| `myapp/static/css/`   | Stylesheets |
-| `myapp/static/js/`    | JavaScript files |
-| `myapp/static/images/`| Image assets |
-| `locale/`             | Localization files for translations |
-| `locale/en/`          | English translations |
-| `locale/en/LC_MESSAGES/` | Message catalogs for translations |
-| `locale/en/LC_MESSAGES/django.po` | Translation file for Django messages |
 
+### **Project Structure**
+
+| **Directory/File**        | **Description** |
+|---------------------------|--------------------------------------------------|
+| `MindCare-Burundi/`       | Main project repository |
+| `MindCare/`               | Main Django project folder (settings, URLs, WSGI) |
+| `MindCare/chat/`          | Chat-related functionalities |
+| `MindCare/designs/`       | Design-related files |
+| `MindCare/env/`           | Environment-related configurations |
+| `MindCare/eyt/`           | Project-specific logic and settings |
+| `MindCare/eyt/__init__.py`| Initializes the `eyt` package |
+| `MindCare/eyt/settings.py`| Django settings file |
+| `MindCare/eyt/urls.py`    | URL configurations |
+| `MindCare/eyt/wsgi.py`    | WSGI entry point for the project |
+| `MindCare/eyt/vercel.json`| Deployment configuration for Vercel |
+| `git-filter-repo/`        | Git-related filters (if applicable) |
+| `locale/`                 | Localization files for translations |
+| `media/`                  | Uploaded media files |
+| `media/books/`            | Book-related media |
+| `media/professionals/`    | Media for professionals |
+| `media/Video/`            | Uploaded video files |
+| `media/videos/`           | Additional video files |
+| `myapp/`                  | Django application module |
+| `myapp/__pycache__/`      | Compiled Python files |
+| `myapp/locale/`           | Localization files for translations |
+| `myapp/migrations/`       | Database migration files |
+| `myapp/templates/`        | Template files for the project |
+| `myapp/templates/myapp/`  | Templates for the core application |
+| `myapp/templates/professionals/` | Templates for professionals section |
+| `myapp/templates/about.html` | About page template |
+| `static/`                 | Static files such as CSS and JavaScript |
+| `static/assets/`          | Assets for styling and functionality |
+| `static/css/`             | CSS stylesheets |
+| `static/style.css`        | Main stylesheet file |
+| `staticfiles/`            | Additional static files |
+| `staticfiles/admin/`      | Static files for admin panel |
+| `staticfiles/assets/`     | Extra assets |
+| `staticfiles/css/`        | Extra stylesheets |
+| `staticfiles/style.css`   | Extra stylesheet file |
+| `venv/`                   | Virtual environment directory |
+| `.gitignore`              | Git ignore file for ignoring unnecessary files |
+| `backup.sql`              | Backup of the database |
+| `db.sqlite3`              | SQLite database file |
+| `manage.py`               | Django management script |
+| `mindcare_schema.dbml`    | Database schema file (for documentation or modeling) |
+| `render.yaml`             | Render deployment configuration |
+| `requirements.txt`        | Python dependencies list |
+| `schema.sql`              | SQL schema file |
+| `.env`                    | Environment variables (not included in Git) |
+| `README.md`               | Project documentation |
 
 ## Contribution
 To contribute:
