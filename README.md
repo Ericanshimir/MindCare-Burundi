@@ -16,11 +16,11 @@ MindCare is a comprehensive mental health platform designed to support users in 
 - **Contact** – Provides crisis intervention information and direct contact with professional helplines.
 - **Mental Health Ressource Center** – Provides curated content to promote well-being and positive mental habits.
   
-# Link to the demo of MindCare App.
+🎥# Link to the video demo of MindCare App.
 
 https://youtu.be/sWvQSMP69EI
 
-# Link to the deployed version of MindCare App
+🌍# Link to the deployed version of MindCare App
 
 https://mindcare-burundi.onrender.com
 
@@ -48,7 +48,7 @@ https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
 
 3. JavaScript (Interactivity)
 
-# Running MindCare-Burundi on Render
+🚀# Running MindCare-Burundi on Render
 
 # 1. Deploy Backend on Render
 
@@ -111,7 +111,7 @@ Visit the deployed app https://mindcare-burundi.onrender.com.
 **Consult Professionals:** Book appointments with experts.
 
 
-# Steps to Run the App Locally
+🛠️# Steps to Run the App Locally
 **1. Clone the Repository**
    ```sh
    https://github.com/Ericanshimir/MindCare-Burundi.git
@@ -141,7 +141,7 @@ Visit the deployed app https://mindcare-burundi.onrender.com.
 **7. Access the Application**
    Open your browser and navigate to: `http://127.0.0.1:8000/`
     
-## Contribution
+🤝## Contribution
 To contribute:
 1. Fork the repository.
 2. Create a new branch: `git checkout -b feature-branch-name`.
