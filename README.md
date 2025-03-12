@@ -146,7 +146,132 @@ python manage.py createsuperuser
    ```
 **8. Access the Application**
    Open your browser and navigate to: `http://127.0.0.1:8000/`
-    
+
+# Project structure
+
+```
+MindCare-Burundi/
+│
+├── .env
+├── README.md
+├── build.sh
+├── render.yaml
+├── requirements.txt
+│
+├── MindCare/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── eyt/
+│       ├── __init__.py
+│       ├── settings.py
+│       └── other_files.py
+│
+├── media/
+│   ├── books/
+│   ├── professionals/
+│   └── videos/
+│
+├── myapp/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── views.py
+│   ├── migrations/
+│   │   └── __init__.py
+│   ├── templates/
+│   │   ├── myapp/
+│   │   └── professionals/
+│   └── static/
+│       ├── css/
+│       ├── js/
+│       └── images/
+│
+└── locale/
+    └── en/
+        └── LC_MESSAGES/
+            └── django.po
+```
+
+**Explanation:**
+
+- **`.env`**: Environment variables file, typically used to store sensitive information like API keys and database credentials.
+
+- **`README.md`**: Markdown file providing an overview and documentation of the project.
+
+- **`build.sh`**: Shell script, possibly used for building or deploying the project.
+
+- **`render.yaml`**: Configuration file for deploying the application on Render.
+
+- **`requirements.txt`**: Lists the Python dependencies required for the project.
+
+- **`MindCare/`**: Main Django project directory containing essential configurations:
+
+  - **`__init__.py`**: Initializes the package.
+
+  - **`asgi.py`**: ASGI configuration for asynchronous support.
+
+  - **`urls.py`**: URL declarations for routing.
+
+  - **`wsgi.py`**: WSGI configuration for deployment.
+
+  - **`eyt/`**: Subdirectory containing additional configurations:
+
+    - **`__init__.py`**: Initializes the `eyt` package.
+
+    - **`settings.py`**: Contains project settings.
+
+    - **`other_files.py`**: Placeholder for other configuration or utility files within the `eyt` directory.
+
+- **`media/`**: Directory for user-uploaded content:
+
+  - **`books/`**: Uploaded book files.
+
+  - **`professionals/`**: Media related to professional profiles.
+
+  - **`videos/`**: Uploaded video content.
+
+- **`myapp/`**: Django application directory:
+
+  - **`__init__.py`**: Initializes the application package.
+
+  - **`admin.py`**: Admin site configurations.
+
+  - **`apps.py`**: Application configuration.
+
+  - **`models.py`**: Data models for the application.
+
+  - **`tests.py`**: Test cases for the application.
+
+  - **`views.py`**: Application views and logic.
+
+  - **`migrations/`**: Database migration files.
+
+  - **`templates/`**: HTML templates for the application:
+
+    - **`myapp/`**: Templates specific to the core application.
+
+    - **`professionals/`**: Templates related to professionals' section.
+
+  - **`static/`**: Static files such as CSS, JavaScript, and images:
+
+    - **`css/`**: Stylesheets.
+
+    - **`js/`**: JavaScript files.
+
+    - **`images/`**: Image assets.
+
+- **`locale/`**: Localization files for translations:
+
+  - **`en/`**: English language translations.
+
+    - **`LC_MESSAGES/`**: Message catalogs for translations.
+
+      - **`django.po`**: Translation file for Django messages.
+
 ## Contribution
 To contribute:
 1. Fork the repository.
