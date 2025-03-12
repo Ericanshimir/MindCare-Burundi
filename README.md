@@ -25,6 +25,88 @@ https://youtu.be/sWvQSMP69EI
 
 https://mindcare-burundi.onrender.com
 
+# Tech Stack
+
+# Backend:
+
+Python (Django Framework)
+
+SQLite (Lightweight Database)
+
+Gunicorn (WSGI Server for production)
+
+Deployed on Render
+
+# Frontend:
+
+HTML (Page structure)
+
+CSS (Styling)
+
+JavaScript (Interactivity)
+
+# Running MindCare-Burundi on Render
+
+# 1. Deploy Backend on Render
+
+Log in to Render.
+
+Click "New Web Service" and connect your GitHub repository.
+
+Select Django Backend Repository and choose a branch (main).
+
+Set the build and start commands:
+```bash
+Build Command: pip install -r requirements.txt
+Start Command: gunicorn eyt.wsgi:application
+```
+# Configure environment variables in Render Dashboard → Environment:
+
+DATABASE_URL
+SECRET_KEY
+DEBUG → False
+
+Click **"Deploy"** and wait for it to finish.
+
+# 2. Deploy Frontend
+
+Since the frontend is built with HTML, CSS, and JavaScript, you can:
+
+Use GitHub Pages (for free hosting).
+
+Upload the files to Render Static Site.
+
+Deploy on any web server (e.g., Apache, Nginx).
+
+# To deploy on Render Static Site:
+
+Go to Render.
+
+Click **"New Static Site"**.
+
+Select the frontend folder in your repository.
+
+# Configure:
+```bash
+Build Command: None (as it's static)
+Publish Directory: frontend/
+```
+Click **Deploy** and copy the link.
+
+# Usage
+
+Visit the deployed app https://mindcare-burundi.onrender.com.
+
+Sign Up/Login: Create an account or log in.
+
+Access training materials: Read mental health articles and guides.
+
+Engage in Discussions: Join community forums.
+
+Take Self-Assessment quizzes: Evaluate your mental wellness.
+
+Consult Professionals: Book appointments with experts.
+
 # Screenshots of the app interface can be found this the **designs folder** of this repository
 
 https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
