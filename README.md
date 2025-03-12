@@ -46,7 +46,7 @@ JavaScript (Interactivity)
 
 # Running MindCare-Burundi on Render
 
-1. **Deploy Backend on Render**
+1.**Deploy Backend on Render**
 
 Log in to Render.
 
@@ -67,7 +67,7 @@ DEBUG → False
 
 Click **"Deploy"** and wait for it to finish.
 
-2. **Deploy Frontend**
+2.**Deploy Frontend**
 
 Since the frontend is built with HTML, CSS, and JavaScript, you can:
 
