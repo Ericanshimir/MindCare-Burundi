@@ -32,21 +32,21 @@ https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
 
 **Backend:**
 
-Python (Django Framework)
+1. Python (Django Framework)
 
-SQLite (Lightweight Database)
+2. SQLite (Lightweight Database)
 
-Gunicorn (WSGI Server for production)
+3. Gunicorn (WSGI Server for production)
 
-Deployed on Render
+4. Deployed on Render
 
 **Frontend:**
 
-HTML (Page structure)
+1. HTML (Page structure)
 
-CSS (Styling)
+2. CSS (Styling)
 
-JavaScript (Interactivity)
+3. JavaScript (Interactivity)
 
 # Running MindCare-Burundi on Render
 
@@ -126,19 +126,19 @@ Visit the deployed app https://mindcare-burundi.onrender.com.
    python3 -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
-4. **Install Dependencies**
+**4. Install Dependencies**
    ```sh
    pip install -r requirements.txt
    ```
-5. **Set Up Database**
+**5. Set Up Database**
    ```sh
-   python manage.py migrate
+  python manage.py migrate
    ```
-6. **Run the Application**
+**6. Run the Application**
    ```sh
-   python manage.py runserver
+  python manage.py runserver
    ```
-7. **Access the Application**
+**7. Access the Application**
    Open your browser and navigate to: `http://127.0.0.1:8000/`
     
 ## Contribution
