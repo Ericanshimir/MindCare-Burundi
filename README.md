@@ -100,15 +100,15 @@ Click **Deploy** and copy the link.
 
 Visit the deployed app https://mindcare-burundi.onrender.com.
 
-Sign Up/Login: Create an account or log in.
+**Sign Up/Login:** Create an account or log in.
 
-Access training materials: Read mental health articles and guides.
+**Access training materials:** Read mental health articles and guides.
 
-Engage in Discussions: Join community forums.
+**Engage in Discussions:** Join community forums.
 
-Take Self-Assessment quizzes: Evaluate your mental wellness.
+**Take Self-Assessment quizzes:** Evaluate your mental wellness.
 
-Consult Professionals: Book appointments with experts.
+**Consult Professionals:** Book appointments with experts.
 
 
 # Steps to Run the App Locally
@@ -140,21 +140,6 @@ Consult Professionals: Book appointments with experts.
    ```
 7. **Access the Application**
    Open your browser and navigate to: `http://127.0.0.1:8000/`
-
-8.  **Navigation & UI Details**
-
-**Home Page**: Overview of the platform.
-
-**Dashboard**: Personalized user experience and tracking.
-
-**Quizzes Page**: Take self-assessment quizzes.
-
-**Appointment Booking**: Schedule a session with a professional.
-
-**Training Materials**: Access training materials.
-
-**Community Forum**: This is where the users and professional they will interact.
-
     
 ## Contribution
 To contribute:
