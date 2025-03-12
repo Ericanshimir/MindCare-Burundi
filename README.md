@@ -24,6 +24,10 @@ https://youtu.be/sWvQSMP69EI
 
 https://mindcare-burundi.onrender.com
 
+# Screenshots of the app interface can be found this the **designs folder** of this repository
+
+https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
+
 **Tech Stack**
 
 **Backend:**
@@ -106,9 +110,6 @@ Take Self-Assessment quizzes: Evaluate your mental wellness.
 
 Consult Professionals: Book appointments with experts.
 
-**Screenshots of the app interface can be found this the **designs folder** of this repository**
-
-https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
 
 ### Steps to Run the App Locally
 **1. Clone the Repository**
