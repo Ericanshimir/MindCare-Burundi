@@ -149,9 +149,6 @@ python manage.py createsuperuser
 
 ### **Project Structure**
 
-
-### **Project Structure**
-
 | **Directory/File**        | **Description** |
 |---------------------------|--------------------------------------------------|
 | `MindCare-Burundi/`       | Main project repository |
