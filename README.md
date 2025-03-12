@@ -16,11 +16,11 @@ MindCare is a comprehensive mental health platform designed to support users in 
 - **Contact** – Provides crisis intervention information and direct contact with professional helplines.
 - **Mental Health Ressource Center** – Provides curated content to promote well-being and positive mental habits.
   
-**Link to the demo of MindCare App.**
+# Link to the demo of MindCare App.
 
 https://youtu.be/sWvQSMP69EI
 
-**Link to the deployed version of MindCare App**
+# Link to the deployed version of MindCare App
 
 https://mindcare-burundi.onrender.com
 
