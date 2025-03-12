@@ -52,49 +52,49 @@ https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
 
 # 1. Deploy Backend on Render
 
-Log in to Render.
+1. Log in to Render.
 
-Click "New Web Service" and connect your GitHub repository.
+2. Click "New Web Service" and connect your GitHub repository.
 
-Select Django Backend Repository and choose a branch (main).
+3. Select Django Backend Repository and choose a branch (main).
 
-Set the build and start commands:
+4. Set the build and start commands:
 ```bash
 Build Command: pip install -r requirements.txt
 Start Command: gunicorn eyt.wsgi:application
 ```
 **Configure environment variables in Render Dashboard → Environment:**
 
-DATABASE_URL
-SECRET_KEY
-DEBUG → False
+1. DATABASE_URL
+2. SECRET_KEY
+3. DEBUG → False
 
 Click **"Deploy"** and wait for it to finish.
 
 # 2. Deploy Frontend
 
-Since the frontend is built with HTML, CSS, and JavaScript, you can:
+1. Since the frontend is built with HTML, CSS, and JavaScript, you can:
 
-Use GitHub Pages (for free hosting).
+2. Use GitHub Pages (for free hosting).
 
-Upload the files to Render Static Site.
+3. Upload the files to Render Static Site.
 
-Deploy on any web server (e.g., Apache, Nginx).
+4. Deploy on any web server (e.g., Apache, Nginx).
 
 **To deploy on Render Static Site:**
 
-Go to Render.
+1. Go to Render.
 
-Click **"New Static Site"**.
+2. Click **"New Static Site"**.
 
-Select the frontend folder in your repository.
+3. Select the frontend folder in your repository.
 
-**Configure:**
+4. **Configure:**
 ```bash
 Build Command: None (as it's static)
 Publish Directory: frontend/
 ```
-Click **Deploy** and copy the link.
+5. Click **Deploy** and copy the link.
 
 # Usage
 
