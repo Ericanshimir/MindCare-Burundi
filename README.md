@@ -131,15 +131,20 @@ Visit the deployed app https://mindcare-burundi.onrender.com.
    ```sh
    pip install -r requirements.txt
    ```
-**5. Set Up Database**
+**5. Apply Migrations**
    ```sh
+  python manage.py makemigrations
   python manage.py migrate
    ```
-**6. Run the Application**
+**6. Create Superuser (For Admin Access)**
+```sh
+python manage.py createsuperuser
+```
+**7. Run the Application**
    ```sh
   python manage.py runserver
    ```
-**7. Access the Application**
+**8. Access the Application**
    Open your browser and navigate to: `http://127.0.0.1:8000/`
     
 ## Contribution
