@@ -28,7 +28,7 @@ https://mindcare-burundi.onrender.com
 
 https://github.com/Ericanshimir/MindCare-Burundi/tree/main/MindCare/designs
 
-**Tech Stack**
+# Tech Stack
 
 **Backend:**
 
