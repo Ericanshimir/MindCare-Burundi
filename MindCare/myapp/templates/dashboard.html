@@ -7,7 +7,6 @@
     <title id="dashboard-title">User Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 </head>
 <body>
@@ -35,72 +34,231 @@
                     <button class="btn btn-danger btn-sm mb-2" id="clear-notifications">
                         <i class="fas fa-trash-alt"></i> Clear All
                     </button>
-                    <div id="notifications-container">
-                        {% for notification in notifications %}
-                            <div class="alert notification-row {% if forloop.counter > 5 %}hidden{% endif %}">
-                                <i class="fas fa-bell me-3"></i>
-                                <div>
-                                    <strong>{{ notification.message }}</strong><br>
-                                    <small class="text-muted">{{ notification.created_at|date:"M d, Y H:i A" }}</small>
-                                </div>
-                            </div>
-                        {% empty %}
-                            <p class="text-muted">No notifications available.</p>
-                        {% endfor %}
-                    </div>
+                    <div id="notifications-container"></div>
                     <button id="read-more-btn" class="btn btn-primary mt-3" onclick="toggleMore()" style="display: none;">See More</button>
                 </div>
             </main>
         </div>
     </div>
-    <script>
-        function toggleMore() {
-    let hiddenRows = document.querySelectorAll('.notification-row.hidden');
-    let button = document.getElementById('read-more-btn');
 
-    if (hiddenRows.length > 0) {
-        hiddenRows.forEach(row => row.classList.remove('hidden'));
-        button.innerText = 'Show Less';
-    } else {
-        let rows = document.querySelectorAll('.notification-row');
-        rows.forEach((row, index) => {
-            if (index >= 5) row.classList.add('hidden');
+    <!-- Hidden Google Translate Element -->
+    <div id="google_translate_element"></div>
+    
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'fr,es,de,sw,zh-CN,ar,hi,ja',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function applyTranslation() {
+            let savedLanguage = localStorage.getItem('selectedLanguage');
+            if (!savedLanguage) return;
+
+            let iframe = document.querySelector("iframe.skiptranslate");
+            if (iframe) {
+                let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+                let select = innerDoc.querySelector("select.goog-te-combo");
+                if (select) {
+                    select.value = savedLanguage;
+                    select.dispatchEvent(new Event("change"));
+                }
+            }
+        }
+
+        function forceTranslationUpdate() {
+            let select = document.querySelector(".goog-te-combo");
+            if (select) {
+                select.dispatchEvent(new Event("change"));
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let savedLanguage = localStorage.getItem('selectedLanguage');
+            if (savedLanguage) {
+                applyTranslation();
+                setTimeout(forceTranslationUpdate, 1000); // Ensures translation is applied
+            }
+
+            // Detect when the user returns to the page (without refresh)
+            document.addEventListener("visibilitychange", function() {
+                if (!document.hidden) {
+                    applyTranslation();  // Reapply translation when user comes back
+                    setTimeout(forceTranslationUpdate, 1000);
+                }
+            });
+
+            // Also listen for storage updates in case the language changes while on another tab
+            window.addEventListener("storage", function(event) {
+                if (event.key === "selectedLanguage") {
+                    applyTranslation();
+                    setTimeout(forceTranslationUpdate, 1000);
+                }
+            });
+
+            // Fetch notifications dynamically
+            fetch("{% url 'fetch_notifications' %}")
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById("notifications-container");
+                    container.innerHTML = "";
+                    
+                    if (data.notifications.length > 0) {
+                        data.notifications.forEach((notification, index) => {
+                            let hiddenClass = index >= 5 ? 'hidden' : '';
+                            container.innerHTML += `
+                                <div class="alert alert-info notification-row ${hiddenClass}">
+                                    <i class="fas fa-bell me-3"></i>
+                                    <div>
+                                        <strong>${notification.message}</strong><br>
+                                        <small class="text-muted">${notification.created_at}</small>
+                                    </div>
+                                </div>`;
+                        });
+                        
+                        if (data.notifications.length > 5) {
+                            document.getElementById("read-more-btn").style.display = "block";
+                        }
+                    } else {
+                        container.innerHTML = "<p class='text-muted'>No notifications available.</p>";
+                    }
+                })
+                .catch(error => console.error("Error fetching notifications:", error));
         });
-        button.innerText = 'See More';
-    }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <style>
+        iframe.skiptranslate {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            opacity: 0 !important;
+        }
+        .goog-logo-link, .goog-te-gadget span, .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        .goog-te-combo {
+            display: none !important;
+        }
+        /* General Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    fetch("{% url 'fetch_notifications' %}")
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById("notifications-container");
-            container.innerHTML = "";
+/* Sidebar Styling */
+.sidebar {
+  background-color: #1f4870;
+  color: white;
+  min-height: 100vh;
+  padding: 20px;
+}
 
-            if (data.notifications.length > 0) {
-                data.notifications.forEach((notification, index) => {
-                    let hiddenClass = index >= 5 ? 'hidden' : ''; // Hide notifications beyond 5
-                    container.innerHTML += `
-                        <div class="alert notification-row ${hiddenClass}">
-                            <i class="fas fa-bell me-3"></i>
-                            <div>
-                                <strong>${notification.message}</strong><br>
-                                <small class="text-muted">${notification.created_at}</small>
-                            </div>
-                        </div>`;
-                });
+.sidebar h3 {
+  font-weight: bold;
+  font-size: 22px;
+  text-align: center;
+  margin-bottom: 20px;
+}
 
-                // Show "See More" button only if there are more than 5 notifications
-                if (data.notifications.length > 5) {
-                    document.getElementById("read-more-btn").style.display = "block";
-                }
-            } else {
-                container.innerHTML = "<p class='text-muted'>No notifications available.</p>";
-            }
-        })
-        .catch(error => console.error("Error fetching notifications:", error));
-});
+.sidebar a {
+  display: block;
+  background-color: transparent;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+}
 
-    </script>
+.sidebar a:hover {
+  background-color: #163754;
+  transform: scale(1.05);
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  padding: 30px;
+}
+
+#welcome-message {
+  color: #1f4870;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Notifications Card */
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Notifications */
+.notification-row {
+  background-color: #e7f1ff;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+.notification-row i {
+  font-size: 20px;
+  margin-right: 10px;
+  color: #1f4870;
+}
+
+/* Clear Notifications Button */
+#clear-notifications {
+  background-color:#1f4870;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+}
+
+#clear-notifications:hover {
+  background-color: #343c58 !important;
+  transform: scale(1.05);
+}
+
+/* See More / Show Less Button */
+#read-more-btn {
+  background-color: #1f4870;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+  display: block;
+  margin: auto;
+}
+
+#read-more-btn:hover {
+  background-color: #163754;
+  transform: scale(1.05);
+}
+
+.hidden {
+  display: none;
+}
+
+    </style>
 </body>
 </html>

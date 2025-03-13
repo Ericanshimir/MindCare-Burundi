@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="training-title">Training Materials</title>
+  
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,11 +15,10 @@
     }
 
     h1 {
-      color: #020b15;
+      color: white;
       text-align: center;
       padding: 20px;
       background-color: #1f4870;
-      color: white;
       margin: 0;
     }
 
@@ -94,21 +94,10 @@
       text-decoration: underline;
     }
 
-    @media (max-width: 768px) {
-      .video-item, .list-item {
-        width: 90%;
-      }
-    }
-
-    /* Language Selection Container */
-    .language-container {
-      text-align: center;
-      margin-top: 20px;
-    }
     .back-button {
       position: absolute;
       top: 20px;
-      left: 20px; /* Moved to the left side */
+      left: 20px;
       background-color: #1f4870;
       color: white;
       padding: 10px 16px;
@@ -123,6 +112,23 @@
       transform: scale(1.05);
     }
 
+    /* ✅ Hide Google Translate Branding */
+    iframe.skiptranslate,
+    .goog-logo-link, 
+    .goog-te-gadget span, 
+    .goog-te-banner-frame.skiptranslate, 
+    .goog-te-gadget,
+    .goog-te-banner-frame {
+        display: none !important;
+    }
+
+    .goog-te-combo {
+        display: none !important;
+    }
+
+    body {
+        top: 0 !important;
+    }
   </style>
 </head>
 <body>
@@ -190,7 +196,40 @@
     </div>
   </div>
 
-  
+  <!-- Google Translate (Hidden) -->
+  <div id="google_translate_element"></div>
+
+  <script>
+    function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+            pageLanguage: 'en',
+            includedLanguages: 'fr,es,de,sw,zh-CN,ar,hi,ja',
+            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+            autoDisplay: false
+        }, 'google_translate_element');
+    }
+
+    function applyTranslation() {
+        let savedLanguage = localStorage.getItem('selectedLanguage');
+        if (!savedLanguage) return;
+
+        let iframe = document.querySelector("iframe.skiptranslate");
+        if (iframe) {
+            let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+            let select = innerDoc.querySelector("select.goog-te-combo");
+            if (select) {
+                select.value = savedLanguage;
+                select.dispatchEvent(new Event("change"));
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        applyTranslation();
+        setTimeout(() => document.querySelector(".goog-te-combo")?.dispatchEvent(new Event("change")), 1000);
+    });
+  </script>
+  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
 </body>
 </html>

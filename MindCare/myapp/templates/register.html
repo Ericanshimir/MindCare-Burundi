@@ -148,6 +148,99 @@
 
             <button type="submit"><i class="fas fa-user-check"></i> Sign Up</button>
         </form>
+    </div>
+
+    <!-- Google Translate -->
+    <div id="google_translate_element"></div>
+
+    <script>
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'fr,es,de,sw,zh-CN,ar,hi,ja',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function applyTranslation() {
+            let savedLanguage = localStorage.getItem('selectedLanguage');
+            if (!savedLanguage) return;
+
+            let iframe = document.querySelector("iframe.skiptranslate");
+            if (iframe) {
+                let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+                let select = innerDoc.querySelector("select.goog-te-combo");
+                if (select) {
+                    select.value = savedLanguage;
+                    select.dispatchEvent(new Event("change"));
+                }
+            }
+        }
+
+        function forceTranslationUpdate() {
+            let select = document.querySelector(".goog-te-combo");
+            if (select) {
+                select.dispatchEvent(new Event("change"));
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            applyTranslation();
+            setTimeout(forceTranslationUpdate, 1000);
+
+            // Detect when the user returns to the page (without refresh)
+            document.addEventListener("visibilitychange", function() {
+                if (!document.hidden) {
+                    applyTranslation();
+                    setTimeout(forceTranslationUpdate, 1000);
+                }
+            });
+
+            // Also listen for storage updates in case the language changes while on another tab
+            window.addEventListener("storage", function(event) {
+                if (event.key === "selectedLanguage") {
+                    applyTranslation();
+                    setTimeout(forceTranslationUpdate, 1000);
+                }
+            });
+        });
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <style>
+        iframe.skiptranslate {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            opacity: 0 !important;
+        }
+        .goog-logo-link, .goog-te-gadget span, .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        .goog-te-combo {
+            display: none !important;
+        }
+        /* Hide the floating Google Translate widget */
+.goog-te-banner-frame.skiptranslate, 
+.goog-te-gadget-simple {
+    display: none !important;
+}
+
+/* Hide the Google logo that appears in the corner */
+.goog-logo-link, 
+.goog-te-gadget span, 
+.goog-te-banner-frame {
+    display: none !important;
+}
+
+/* Prevent page shifting due to the hidden Google Translate frame */
+body {
+    top: 0 !important;
+}
+
+    </style>
 
 </body>
 </html>

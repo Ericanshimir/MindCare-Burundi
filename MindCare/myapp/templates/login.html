@@ -123,22 +123,6 @@
             border-left: 4px solid #e74c3c;
         }
 
-        /* Django Messages */
-        .messages {
-            list-style: none;
-            margin-bottom: 15px;
-        }
-
-        .messages .error {
-            color: #e74c3c;
-            font-weight: 600;
-            padding: 10px;
-            background-color: #fdecea;
-            border-radius: 5px;
-            border-left: 4px solid #e74c3c;
-            margin-bottom: 10px;
-        }
-
         /* Responsive Design */
         @media (max-width: 450px) {
             .container {
@@ -153,7 +137,7 @@
     <div class="container">
         <h1><i class="fas fa-user-circle"></i> Login</h1>
 
-        <!-- Display Django messages if any -->
+        <!-- Django Messages -->
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -190,17 +174,97 @@
         </div>
     </div>
 
+    <!-- Google Translate -->
+    <div id="google_translate_element"></div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Simplified login - just submit the form directly
-            // No pre-validation of role that can cause issues
-            const loginForm = document.getElementById('loginForm');
-            const errorMessage = document.getElementById('error-message');
-            const errorText = document.getElementById('error-text');
-            
-            // We'll let Django handle the validation on the server side
-            // This removes the complexity of the AJAX validation
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'fr,es,de,sw,zh-CN,ar,hi,ja',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function applyTranslation() {
+            let savedLanguage = localStorage.getItem('selectedLanguage');
+            if (!savedLanguage) return;
+
+            let iframe = document.querySelector("iframe.skiptranslate");
+            if (iframe) {
+                let innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+                let select = innerDoc.querySelector("select.goog-te-combo");
+                if (select) {
+                    select.value = savedLanguage;
+                    select.dispatchEvent(new Event("change"));
+                }
+            }
+        }
+
+        function forceTranslationUpdate() {
+            let select = document.querySelector(".goog-te-combo");
+            if (select) {
+                select.dispatchEvent(new Event("change"));
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            applyTranslation();
+            setTimeout(forceTranslationUpdate, 1000);
+
+            // Detect when the user returns to the page (without refresh)
+            document.addEventListener("visibilitychange", function() {
+                if (!document.hidden) {
+                    applyTranslation();
+                    setTimeout(forceTranslationUpdate, 1000);
+                }
+            });
+
+            // Also listen for storage updates in case the language changes while on another tab
+            window.addEventListener("storage", function(event) {
+                if (event.key === "selectedLanguage") {
+                    applyTranslation();
+                    setTimeout(forceTranslationUpdate, 1000);
+                }
+            });
         });
     </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <style>
+        iframe.skiptranslate {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            opacity: 0 !important;
+        }
+        .goog-logo-link, .goog-te-gadget span, .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        .goog-te-combo {
+            display: none !important;
+        }
+         /* Hide the floating Google Translate widget */
+.goog-te-banner-frame.skiptranslate, 
+.goog-te-gadget-simple {
+    display: none !important;
+}
+
+/* Hide the Google logo that appears in the corner */
+.goog-logo-link, 
+.goog-te-gadget span, 
+.goog-te-banner-frame {
+    display: none !important;
+}
+
+/* Prevent page shifting due to the hidden Google Translate frame */
+body {
+    top: 0 !important;
+}
+
+    </style>
+
 </body>
 </html>
