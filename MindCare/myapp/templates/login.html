@@ -139,12 +139,14 @@
 
         <!-- Django Messages -->
         {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+<div class="messages">
+    {% for message in messages %}
+    <div class="{% if message.tags %}message {{ message.tags }}{% endif %}" style="color: red; font-weight: bold;">
+        {{ message }}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
 
         <div id="error-message" class="error-message">
             <i class="fas fa-exclamation-circle"></i> 

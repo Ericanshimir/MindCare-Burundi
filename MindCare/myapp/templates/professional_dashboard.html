@@ -72,6 +72,7 @@
             max-height: calc(100vh - 60px);
         }
         .hidden { display: none; }
+        .disabled { pointer-events: none; }
     </style>
 </head>
 <body>
@@ -79,27 +80,48 @@
     <div class="sidebar">
         <h4 class="text-center text-white mt-3" id="sidebar-title">MindCare</h4>
         <a href="{% url 'professional_dashboard' %}" class="active" id="dashboard-link"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-        <a href="{% url 'appointments' professional.id %}" id="appointments-link"><i class="fas fa-calendar-alt"></i> Appointments</a>
-        <a href="{% url 'anonymous_chat' %}" id="messages-link"><i class="fas fa-envelope"></i> Messages</a>
-        <a href="{% url 'professional_detail' professional.id %}" id="profile-link"><i class="fas fa-user"></i> Profile</a>
-        <a href="{% url 'update_availability' %}" id="manage-availability-link"><i class="fas fa-clock"></i> Manage Availability</a>
+        
+        {% if is_admin %}
+            <a href="#" id="appointments-link" class="disabled" style="opacity: 0.6;"><i class="fas fa-calendar-alt"></i> Appointments</a>
+            <a href="{% url 'anonymous_chat' %}" id="messages-link"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="#" id="profile-link" class="disabled" style="opacity: 0.6;"><i class="fas fa-user"></i> Profile</a>
+            <a href="#" id="manage-availability-link" class="disabled" style="opacity: 0.6;"><i class="fas fa-clock"></i> Manage Availability</a>
+        {% else %}
+            <a href="{% url 'appointments' professional.id %}" id="appointments-link"><i class="fas fa-calendar-alt"></i> Appointments</a>
+            <a href="{% url 'anonymous_chat' %}" id="messages-link"><i class="fas fa-envelope"></i> Messages</a>
+            <a href="{% url 'professional_detail' professional.id %}" id="profile-link"><i class="fas fa-user"></i> Profile</a>
+            <a href="{% url 'update_availability' %}" id="manage-availability-link"><i class="fas fa-clock"></i> Manage Availability</a>
+        {% endif %}
+        
         <a href="{% url 'quizzes' %}" id="mental-health-quizzes">📝 Mental Health Quizzes</a>
         <a href="{% url 'training_materials' %}" id="training-materials">📚 Training Materials</a>
         <a href="{% url 'settings_professional' %}" id="settings-link"><i class="fas fa-cogs"></i> Settings</a>
-         <!-- Add this after the existing sidebar links, before the logout link -->
-{% if user.is_superuser %}
-<a href="{% url 'manage_professionals' %}" id="manage-professionals-link">
-    <i class="fas fa-users-cog"></i> Manage Professionals
-</a>
-{% endif %}          
+        
+        {% if user.is_superuser %}
+        <a href="{% url 'manage_professionals' %}" id="manage-professionals-link">
+            <i class="fas fa-users-cog"></i> Manage Professionals
+        </a>
+        {% endif %}          
         <a href="{% url 'logout' %}" id="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
 
     <header class="header">
-        <span id="welcome-message">Welcome, {{ professional.name }}</span>
+        <span id="welcome-message">
+            {% if is_admin %}
+                Welcome, Administrator
+            {% else %}
+                Welcome, {{ professional.name }}
+            {% endif %}
+        </span>
     </header>
 
     <div class="content">
+        {% if is_admin %}
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> You are viewing this dashboard as an administrator. Some features may be limited.
+        </div>
+        {% endif %}
+        
         <div class="row">
             <div class="col-lg-6">
                 <div class="card p-3 mb-4">
@@ -156,14 +178,6 @@
         </div>
     </div>
 </div>
-<script>
-    function toggleMore(listId, buttonId) {
-        let hiddenRows = document.querySelectorAll(`#${listId} .hidden`);
-        let button = document.getElementById(buttonId);
-        hiddenRows.forEach(row => row.classList.toggle('hidden'));
-        button.innerText = hiddenRows[0].classList.contains('hidden') ? 'Read More' : 'Show Less';
-    }
-</script>
 <script>
     function toggleMore(listId, buttonId) {
         let hiddenRows = document.querySelectorAll(`#${listId} .hidden`);

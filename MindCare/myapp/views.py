@@ -692,40 +692,79 @@ def professional_detail(request, professional_id=None):
 
 @login_required
 def professional_dashboard(request):
-    professional = request.user.professional_profile
-    current_datetime = now()  # Get current date and time
-
-    # ✅ Retrieve only future appointments (including today, but checking time as well)
-    upcoming_appointments = Appointment.objects.filter(
-        professional_name=professional.name,
-        status='Upcoming'
-    ).filter(
-        date__gt=current_datetime.date()  # Appointments in future dates
-    ).union(
-        Appointment.objects.filter(
+    # Check if user is admin
+    if request.user.is_staff or request.user.is_superuser:
+        current_datetime = now()  # Get current date and time
+        
+        # For admins, show all upcoming appointments
+        upcoming_appointments = Appointment.objects.filter(
+            status='Upcoming'
+        ).filter(
+            date__gt=current_datetime.date()  # Appointments in future dates
+        ).union(
+            Appointment.objects.filter(
+                status='Upcoming',
+                date=current_datetime.date(),  # Include today's appointments
+                time__gt=current_datetime.time()  # Only future times
+            )
+        ).order_by('date', 'time')
+        
+        # Get all messages
+        messages = Message.objects.filter(
+            receiver__user__is_staff=False  # Messages to non-admin professionals
+        ).order_by('-timestamp')
+        
+        # Get admin notifications
+        notifications = Notification.objects.filter(
+            recipient=request.user
+        ).order_by("-created_at")
+        
+        return render(request, 'professional_dashboard.html', {
+            'is_admin': True,  # Flag to identify admin in template
+            'upcoming_appointments': upcoming_appointments,
+            'messages': messages,
+            'notifications': notifications,
+            'current_datetime': current_datetime
+        })
+    
+    # Regular professional user flow (unchanged)
+    try:
+        professional = request.user.professional_profile
+        current_datetime = now()  # Get current date and time
+        
+        # ✅ Retrieve only future appointments (including today, but checking time as well)
+        upcoming_appointments = Appointment.objects.filter(
             professional_name=professional.name,
-            status='Upcoming',
-            date=current_datetime.date(),  # Include today's appointments
-            time__gt=current_datetime.time()  # Only future times
-        )
-    ).order_by('date', 'time')
-
-    # ✅ Retrieve messages where the professional is the receiver
-    messages = Message.objects.filter(receiver=professional).order_by('-timestamp')
-
-    # ✅ Retrieve unread notifications
-    notifications = Notification.objects.filter(
-        recipient=request.user
-    ).order_by("-created_at")
-
-    return render(request, 'professional_dashboard.html', {
-        'professional': professional,
-        'upcoming_appointments': upcoming_appointments,
-        'messages': messages,
-        'notifications': notifications,
-        'current_datetime': current_datetime  # ✅ Pass the current timestamp
-    })
-
+            status='Upcoming'
+        ).filter(
+            date__gt=current_datetime.date()  # Appointments in future dates
+        ).union(
+            Appointment.objects.filter(
+                professional_name=professional.name,
+                status='Upcoming',
+                date=current_datetime.date(),  # Include today's appointments
+                time__gt=current_datetime.time()  # Only future times
+            )
+        ).order_by('date', 'time')
+        
+        # ✅ Retrieve messages where the professional is the receiver
+        messages = Message.objects.filter(receiver=professional).order_by('-timestamp')
+        
+        # ✅ Retrieve unread notifications
+        notifications = Notification.objects.filter(
+            recipient=request.user
+        ).order_by("-created_at")
+        
+        return render(request, 'professional_dashboard.html', {
+            'professional': professional,
+            'upcoming_appointments': upcoming_appointments,
+            'messages': messages,
+            'notifications': notifications,
+            'current_datetime': current_datetime  # ✅ Pass the current timestamp
+        })
+    except RelatedObjectDoesNotExist: # type: ignore
+        messages.error(request, 'You do not have a professional profile.')
+        return redirect('dashboard')
 @login_required
 def fetch_updates(request):
     professional = request.user.professional_profile
@@ -781,29 +820,31 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            # User credentials are valid - proceed with login
-            login(request, user)
+            # Check if user is admin - admins can login with any role
+            if user.is_staff or user.is_superuser:
+                login(request, user)
+                # Allow admins to access any dashboard based on selected role
+                if role == 'professional':
+                    return redirect('professional_dashboard')
+                else:
+                    return redirect('dashboard')
             
-            # Check role selection and redirect accordingly
-            if role == 'professional':
-                # Check if professional record exists, create one if it doesn't
-                professional, created = Professional.objects.get_or_create(
-                    user=user,
-                    defaults={
-                        'name': user.get_full_name() or user.username,
-                        'specialty': 'General',
-                        'contact_email': user.email or f"{username}@example.com",
-                        'phone_number': '0000000000'
-                    }
-                )
-                
-                if created:
-                    print(f"Created new professional profile for {username} on login")
-                
-                return redirect('professional_dashboard')
+            # For regular users, determine their registered role
+            is_professional = Professional.objects.filter(user=user).exists()
+            
+            # Check if the selected role matches their registration
+            if (role == 'professional' and is_professional) or (role == 'user' and not is_professional):
+                # Correct role selected
+                login(request, user)
+                if role == 'professional':
+                    return redirect('professional_dashboard')
+                else:
+                    return redirect('dashboard')
             else:
-                # Regular user dashboard
-                return redirect('dashboard')
+                # Incorrect role selected
+                correct_role = 'professional' if is_professional else 'regular user'
+                messages.error(request, f'You are registered as a {correct_role}. Please select the correct role.')
+                return render(request, 'login.html')
         else:
             # Invalid credentials
             messages.error(request, 'Invalid username or password.')
