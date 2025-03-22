@@ -114,6 +114,21 @@
                 padding: 20px;
             }
         }
+        .login-container {
+            margin-top: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #2575fc;
+            transition: 0.3s;
+        }
+
+        a:hover {
+            color: #1f4870;
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -148,6 +163,9 @@
 
             <button type="submit"><i class="fas fa-user-check"></i> Sign Up</button>
         </form>
+        <div class="login-container">
+            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
     </div>
 
     <!-- Google Translate -->
