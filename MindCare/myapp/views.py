@@ -1899,3 +1899,11 @@ def delete_professional_account(request):
     
     messages.success(request, "Your account has been deleted")
     return redirect('login')  # Redirect to login page after account deletion
+
+from django.shortcuts import render
+
+def terms_view(request):
+    return render(request, 'terms.html')
+
+def privacy_view(request):
+    return render(request, 'privacy.html')

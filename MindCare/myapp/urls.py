@@ -96,6 +96,8 @@ urlpatterns = [
     path('manage-professionals/add/', views.add_professional, name='add_professional'),
     path('manage-professionals/edit/<int:professional_id>/', views.edit_professional, name='edit_professional'),
     path('manage-professionals/delete/<int:professional_id>/', views.delete_professional, name='delete_professional'),
+    path('terms/', views.terms_view, name='terms'),
+    path('privacy/', views.privacy_view, name='privacy')
     
     
 

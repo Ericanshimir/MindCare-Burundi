@@ -129,6 +129,43 @@
             color: #1f4870;
             text-decoration: underline;
         }
+        /* ✅ Refined Terms Checkbox Styling */
+.terms-container {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    text-align: left;
+    font-size: 14px;
+    color: #444;
+}
+
+.terms-container input[type="checkbox"] {
+    margin-top: 3px;
+    margin-right: 10px;
+    width: 16px;
+    height: 16px;
+    accent-color: #1f4870;
+    cursor: pointer;
+}
+
+.terms-text {
+    line-height: 1.5;
+    font-weight: 400;
+}
+
+.terms-text a {
+    color: #2575fc;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.terms-text a:hover {
+    color: #1f4870;
+    text-decoration: underline;
+}
+
+
     </style>
 </head>
 <body>
@@ -160,7 +197,15 @@
                 <option value="regular">Regular User</option>
                 <option value="professional">Professional</option>
             </select>
-
+            <div class="terms-container">
+                <input type="checkbox" id="termsCheckbox" required>
+                <label for="termsCheckbox" class="terms-text">
+                    I agree to the 
+                    <a href="{% url 'terms' %}" target="_blank">Terms & Conditions</a> and 
+                    <a href="{% url 'privacy' %}" target="_blank">Privacy Policy</a>.
+                </label>
+            </div>
+            
             <button type="submit"><i class="fas fa-user-check"></i> Sign Up</button>
         </form>
         <div class="login-container">
