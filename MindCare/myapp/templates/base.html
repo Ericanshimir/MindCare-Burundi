@@ -261,8 +261,11 @@
         {% block content %}{% endblock %}
     </div>
 
-    <section id="contact" class="py-5">
+    <section id="contact" class="py-5">        
         <div class="container">
+            <div class="section-title"> 
+                <h2>CONTACT US</h2>
+            </div>    
             <div class="row">
                 <div class="col-md-4">
                     <div class="info">
@@ -271,9 +274,8 @@
                         <p><i class="bi bi-telephone-fill"></i> +250790135783</p>
                     </div>
                 </div>
-                
+            
                 <div class="col-md-8">
-                    <!-- Add ID to the form -->
                     <form id="contactForm" action="{% url 'contact' %}" method="post">
                         {% csrf_token %}
                         <input class="form-control mb-3" type="text" name="name" placeholder="Your Name" required>
@@ -282,6 +284,8 @@
                         <textarea class="form-control mb-3" rows="5" name="message" placeholder="Message" required></textarea>
                         <button class="btn-submit" type="submit">Send Message</button>
                     </form>
+                </div>
+            </div>            
     
                     <!-- Success popup (hidden by default) -->
                     <div id="successPopup" class="popup" style="display: none;">
