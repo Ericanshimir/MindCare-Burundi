@@ -1,574 +1,162 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Profile</title>
+    <title>{{ professional.name }} | Professional Profile</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-        <style>
-        /* ✅ Matching the Professionals Section Styling */
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
         body {
-            background: linear-gradient(to right, #ffffff, #e3f2fd);
+            background: linear-gradient(to right, #f7fbff, #e0ecff);
             font-family: 'Arial', sans-serif;
+            color: #1f4870;
         }
+
         .profile-card {
-            background: #ffffff;
-            border-radius: 15px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease-in-out;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            background-color: #fff;
+            transition: transform 0.3s;
         }
+
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+
         .profile-header {
-            background: #1f4870;
-            color: white;
-            padding: 50px 20px;
-            border-radius: 15px 15px 0 0;
+            background: linear-gradient(to right, #1f4870, #163754);
+            color: #fff;
+            padding: 40px;
         }
+
         .profile-img {
-            width: 140px;
-            height: 140px;
-            object-fit: cover;
-            border: 4px solid white;
-            margin-top: -70px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
+            border: 5px solid #fff;
+            object-fit: cover;
+            margin-top: -75px;
         }
+
         .info-item {
+            margin-bottom: 10px;
             font-size: 1.1rem;
-            color: #555;
         }
-        .book-appointment-btn {
-            padding: 12px 25px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #fff !important;
-            background: linear-gradient(135deg, #1f4870, #163754) !important;
-            border: none;
-            border-radius: 30px;
-            transition: all 0.3s ease-in-out;
-        }
-        .book-appointment-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 6px 12px rgba(31, 72, 112, 0.4);
-        }
-        /* ✅ Available Slots Styling */
-        .slots-container {
-    display: flex;
-    flex-direction: column; /* Stacks buttons vertically */
-    align-items: center; /* Centers buttons */
-    gap: 10px; /* Adds spacing between buttons */
-}
 
-.slot-btn {
-    display: block; /* Forces each button to take a new line */
-    width: 100%; /* Ensures full width for proper stacking */
-    max-width: 200px; /* Limits width so buttons don't stretch too much */
-    padding: 10px 15px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-    background-color: #1f4870;
-    color: white;
-    transition: all 0.3s ease-in-out;
-    text-align: center;
-}
-
-
-        .slot-btn:hover {
+        .book-btn,
+        .back-btn {
             background-color: #1f4870;
-        }
-        .slot-btn.booked {
-            background-color: #dc3545;
-            cursor: not-allowed;
-            opacity: 0.6;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: 0.3s;
+            border: none;
         }
 
-        /* ✅ Styled Success Message */
-        .success-popup {
+        .book-btn:hover,
+        .back-btn:hover {
+            background-color: #163754;
+            transform: scale(1.05);
+        }
+
+        .slot {
+            margin: 5px auto;
+            padding: 8px;
+            border-radius: 10px;
+            background-color: #f1f8ff;
+            color: #1f4870;
+            font-weight: bold;
+        }
+
+        .hidden-slots {
             display: none;
-            background: #28a745;
-            color: white;
-            padding: 15px;
+        }
+
+        .modal-content {
+            border-radius: 15px;
+        }
+
+        .modal-header {
+            background-color: #1f4870;
+            color: #fff;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .success-popup {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px;
+            border-radius: 10px;
             position: fixed;
             top: 20px;
             right: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-            z-index: 1000;
-            font-size: 16px;
-            font-weight: bold;
-            text-align: center;
-            width: auto;
-            max-width: 300px;
+            display: none;
         }
-        
-        .success-popup a {
-            color: #ffd700;
-            font-weight: bold;
-            text-decoration: underline;
-        }
-
-        .success-popup a:hover {
-            color: #fff;
-        }
-        /* ✅ Align Specialty, Email, and Phone Number Justified */
-.profile-info {
-    text-align: justify;
-    padding: 10px 20px;
-}
-
-/* ✅ Ensure Contact Information Displays Neatly */
-.info-item {
-    display: block;
-    text-align: justify;
-    word-break: break-word; /* Prevents text from overflowing */
-    font-size: 1.1rem;
-    color: #555;
-    margin-bottom: 10px;
-}
-/* ✅ Hide extra slots initially */
-.hidden-slots {
-    display: none; /* Initially hidden */
-    flex-direction: column; /* Ensures vertical layout */
-    align-items: center;
-}
-
-
-/* ✅ Style for "See More" / "Show Less" button */
-#toggle-slots-btn {
-    background: #1f4870;
-    color: white;
-    font-weight: bold;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    margin-top: 10px;
-}
-
-#toggle-slots-btn:hover {
-    background: #163754;
-    transform: scale(1.05);
-}
-.slots-title {
-    font-size: 1.2rem; /* Slightly larger text */
-    font-weight: bold;
-    color: #1f4870; /* Dark blue color to match theme */
-    text-align: center; /* Center the text */
-    margin-bottom: 10px; /* Add space before the buttons */
-}
-/* ✅ Style the Modal */
-.modal-content {
-    background-color: #f8f9fa; /* Light background for contrast */
-    border-radius: 15px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    border: none;
-}
-
-/* ✅ Style the Modal Header */
-.modal-header {
-    background: linear-gradient(135deg, #1f4870, #163754); /* Main theme color */
-    color: white;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    text-align: center;
-    padding: 15px;
-}
-
-/* ✅ Close Button */
-.modal-header .btn-close {
-    filter: invert(1); /* Makes the close button white */
-}
-
-/* ✅ Style the Modal Title */
-.modal-title {
-    font-size: 1.4rem;
-    font-weight: bold;
-}
-
-/* ✅ Style the Modal Body */
-.modal-body {
-    padding: 20px;
-    text-align: left;
-}
-
-/* ✅ Form Elements */
-.modal-body label {
-    font-weight: bold;
-    color: #1f4870; /* Theme color */
-}
-
-.modal-body .form-control, 
-.modal-body .form-select {
-    border-radius: 8px;
-    border: 1px solid #1f4870; /* Subtle border */
-}
-
-/* ✅ Style the Submit Button */
-.modal-body button[type="submit"] {
-    background: linear-gradient(135deg, #1f4870, #163754); /* Theme color */
-    color: white;
-    font-weight: bold;
-    padding: 12px;
-    border-radius: 8px;
-    border: none;
-    transition: all 0.3s ease-in-out;
-}
-
-.modal-body button[type="submit"]:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 4px 8px rgba(31, 72, 112, 0.4);
-}
-
-/* ✅ Style the Success Message Popup */
-.success-popup {
-    background: #1f4870; /* Theme color */
-    color: white;
-    padding: 15px;
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-    z-index: 1000;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    max-width: 300px;
-}
-
-.success-popup a {
-    color: #ffd700;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.success-popup a:hover {
-    color: #fff;
-}
-/* ✅ Style the See More button container */
-.see-more-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px; /* Adds spacing below the last slot */
-}
-
-/* ✅ Style the "See More" button */
-#toggle-slots-btn {
-    background: linear-gradient(135deg, #1f4870, #163754); /* Theme color */
-    color: white;
-    font-weight: bold;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    width: auto; /* Avoids full-width stretching */
-}
-
-#toggle-slots-btn:hover {
-    background: #163754;
-    transform: scale(1.05);
-}
-
-
     </style>
-    
 </head>
+
 <body>
-
-    <div class="container mt-5">
+    <div class="container py-5">
+        <a href="{% url 'professional_dashboard' %}" class="back-btn mb-4"><i class="fa fa-arrow-left"></i> Back to Dashboard</a>
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-lg-8">
                 <div class="profile-card">
-                    
-                    <div class="profile-header">
-                        <h1>{{ professional.name }}</h1>
+                    <div class="profile-header text-center">
+                        <h2>{{ professional.name }}</h2>
                     </div>
-                    
-                    <div>
-                        {% if professional.image %}
-                            <img src="{{ professional.image.url }}" class="profile-img" alt="{{ professional.name }}">
-                        {% else %}
-                            <img src="{% static 'images/default-profile.png' %}" class="profile-img" alt="Default Profile">
-                        {% endif %}
+                    <div class="text-center">
+                        <img class="profile-img" src="{% if professional.image %}{{ professional.image.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}">
                     </div>
+                    <div class="p-4">
+                        <div class="info-item"><strong>Specialty:</strong> {{ professional.specialty }}</div>
+                        <div class="info-item"><strong>Email:</strong> {{ professional.contact_email }}</div>
+                        <div class="info-item"><strong>Phone:</strong> {{ professional.phone_number }}</div>
 
-                    <div class="profile-info">
-                        <p class="info-item"><strong>Specialty:</strong> {{ professional.specialty }}</p>
-                        <p class="info-item"><strong>Email:</strong> {{ professional.contact_email }}</p>
-                        <p class="info-item"><strong>Phone:</strong> {{ professional.phone_number }}</p>
-                        
-                        {% if user.is_authenticated %}
-                        <div class="profile-info">
-                            <p class="slots-title"><strong>Available Slots:</strong></p> <!-- Title added here -->
-                            
-                            <div class="slots-container">
+                
+
+                        <div class="mt-4">
+                            <h5 class="text-center">Available Slots</h5>
+                            <div class="slots-container text-center">
                                 {% for slot in professional.available_slots %}
                                     {% if slot not in professional.booked_slots %}
-                                        <button class="slot-btn {% if forloop.counter > 3 %}hidden-slots{% endif %}" onclick="selectSlot('{{ slot }}')">
-                                            {{ slot }}
-                                        </button>
+                                        <div class="slot {% if forloop.counter > 3 %}hidden-slots{% endif %}">{{ slot }}</div>
                                     {% endif %}
+                                {% empty %}
+                                    <p class="text-danger">No slots available.</p>
                                 {% endfor %}
                             </div>
-                            
-                            <!-- Move the "See More" button directly below the slots -->
-                            {% if professional.available_slots|length > 4 %}
-                                <div class="see-more-container">
-                                    <button id="toggle-slots-btn" onclick="toggleSlots()">See More</button>
+                            {% if professional.available_slots|length > 3 %}
+                                <div class="text-center mt-2">
+                                    <button class="book-btn" onclick="toggleSlots()">See More</button>
                                 </div>
                             {% endif %}
-                            
-                            
-                            {% if not professional.available_slots or professional.available_slots|length == professional.booked_slots|length %}
-                                <p style="color: red; font-weight: bold;">No available slots</p>
-                            {% endif %}
                         </div>
-                    {% endif %}
-                    {% if user.is_authenticated %}
-
-                        <button class="book-appointment-btn mt-3" onclick="openBookingModal()">📅 Book Appointment</button>
-                    {% endif %}    
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ✅ Booking Modal -->
-    <div id="appointment-modal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Book Appointment</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="appointment-form">
-                        {% csrf_token %}
-                        <p>Booking with: <strong>{{ professional.name }}</strong></p>
-
-                        <label for="appointment-date" class="form-label">Select Date:</label>
-                        <input type="date" class="form-control" id="appointment-date" required>
-
-                        <label for="appointment-time" class="form-label">Select Time:</label>
-                        <select class="form-select" id="appointment-time" required></select>
-
-                        <label for="reason" class="form-label">Reason:</label>
-                        <textarea class="form-control" id="reason" placeholder="Enter appointment reason" required></textarea>
-
-                        <button type="submit" class="btn btn-primary mt-3 w-100">Confirm Appointment</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ✅ Success Message -->
-    <div id="success-popup" class="success-popup">
-        <p>✅ Appointment confirmed!</p>
-        <p>Join your session using the link below:</p>
-        <a id="meet-link" href="#" target="_blank">Join Google Meet</a>
-    </div>
-<!-- Appointment Booking Modal -->
-<div id="appointment-modal" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Book Appointment</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form id="appointment-form">
-            {% csrf_token %}
-            <input type="hidden" name="professional" id="modal-professional-id">
-  
-            <p>Booking with: <strong id="modal-professional-name"></strong></p>
-            <p>Specialty: <span id="modal-specialty"></span></p>
-  
-            <div class="mb-3">
-              <label for="date" class="form-label">Select Date:</label>
-              <input type="date" class="form-control" name="date" id="appointment-date" required>
-            </div>
-  
-            <div class="mb-3">
-              <label for="time" class="form-label">Select Time:</label>
-              <select class="form-select" name="time" id="appointment-time" required>
-              </select>
-            </div>
-  
-            <div class="mb-3">
-              <label for="reason" class="form-label">Reason:</label>
-              <textarea class="form-control" name="reason" placeholder="Enter appointment reason" required></textarea>
-            </div>
-  
-            <button type="submit" class="btn btn-primary w-100">Confirm Appointment</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Success Message -->
-  <div id="success-popup" style="display: none; background: green; color: white; padding: 15px; position: fixed; top: 20px; right: 20px; border-radius: 5px; z-index: 1000;">
-    Appointment confirmed! A Google Meet link has been sent to your email.  
-    <br>
-    <a id="meet-link" href="#" style="color: yellow; font-weight: bold;" target="_blank"></a>
-  </div>
-  <script>
-document.addEventListener("DOMContentLoaded", function () {
-    let today = new Date().toISOString().split("T")[0];
-    document.getElementById("appointment-date").setAttribute("min", today);
-
-    // ✅ Open Modal & Populate Available Slots
-    document.querySelectorAll(".book-appointment-btn").forEach(button => {
-        button.addEventListener("click", function () {
-            let professionalId = "{{ professional.id }}";
-            let professionalName = "{{ professional.name }}";
-            let specialty = "{{ professional.specialty }}";
-            
-            let availableSlots = [];
-            document.querySelectorAll(".slot-btn").forEach(btn => {
-                if (!btn.classList.contains("booked")) {
-                    availableSlots.push(btn.innerText);
-                }
+    <script>
+        function toggleSlots() {
+            document.querySelectorAll('.hidden-slots').forEach(slot => {
+                slot.style.display = slot.style.display === 'block' ? 'none' : 'block';
             });
+        }
 
-            document.getElementById("modal-professional-id").value = professionalId;
-            document.getElementById("modal-professional-name").textContent = professionalName;
-            document.getElementById("modal-specialty").textContent = specialty;
+        function openBookingModal() {
+            var modal = new bootstrap.Modal(document.getElementById('appointment-modal'));
+            modal.show();
+        }
+    </script>
 
-            let timeSelect = document.getElementById("appointment-time");
-            timeSelect.innerHTML = "";
-
-            if (availableSlots.length === 0) {
-                let option = document.createElement("option");
-                option.textContent = "No available slots";
-                option.disabled = true;
-                option.selected = true;
-                timeSelect.appendChild(option);
-            } else {
-                availableSlots.forEach(slot => {
-                    let option = document.createElement("option");
-                    option.value = slot;
-                    option.textContent = slot;
-                    timeSelect.appendChild(option);
-                });
-            }
-
-            let modalElement = document.getElementById("appointment-modal");
-            let modalInstance = new bootstrap.Modal(modalElement);
-            modalInstance.show();
-        });
-    });
-
-    // ✅ Handle Appointment Form Submission
-    document.getElementById("appointment-form").addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        let formData = new FormData(this);
-        let selectedSlot = formData.get("time");
-        let professionalId = formData.get("professional");
-        let submitButton = this.querySelector("button[type='submit']");
-        
-        submitButton.disabled = true;
-        submitButton.textContent = "Booking...";
-
-        fetch("{% url 'book_appointment' %}", {
-            method: "POST",
-            body: formData,
-            headers: {
-                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                let meetLink = data.google_meet_link;
-
-                // ✅ Close the Modal
-                let modalElement = document.getElementById("appointment-modal");
-                let modalInstance = bootstrap.Modal.getInstance(modalElement);
-                if (modalInstance) {
-                    modalInstance.hide();
-                }
-
-                // ✅ Ensure backdrop removal for proper UI
-                setTimeout(() => {
-                    document.querySelectorAll(".modal-backdrop").forEach(backdrop => backdrop.remove());
-                    document.body.classList.remove("modal-open");
-                    document.body.style.overflow = "auto";
-                }, 500);
-
-                // ✅ Remove Booked Slot from UI
-                document.querySelectorAll(".slot-btn").forEach(btn => {
-                    if (btn.innerText === selectedSlot) {
-                        btn.classList.add("booked");
-                        btn.innerText += " - Booked";
-                        btn.disabled = true;
-                    }
-                });
-
-                // ✅ Show Success Message
-                let successPopup = document.getElementById("success-popup");
-                document.getElementById("meet-link").href = meetLink;
-                document.getElementById("meet-link").textContent = "Join Google Meet";
-                successPopup.style.display = "block";
-
-                setTimeout(() => {
-                    successPopup.style.display = "none";
-                }, 5000);
-            }
-        })
-        .catch(error => {
-            console.error("Error booking appointment:", error);
-            alert("Error booking appointment. Please try again.");
-        })
-        .finally(() => {
-            submitButton.disabled = false;
-            submitButton.textContent = "Confirm Appointment";
-        });
-    });
-});
-function toggleSlots() {
-    let hiddenSlots = document.querySelectorAll(".hidden-slots");
-    let toggleButton = document.getElementById("toggle-slots-btn");
-
-    if (toggleButton.innerText === "See More") {
-        hiddenSlots.forEach(slot => {
-            slot.style.display = "block"; /* Show hidden slots */
-        });
-        toggleButton.innerText = "Show Less";
-    } else {
-        hiddenSlots.forEach(slot => {
-            slot.style.display = "none"; /* Hide them again */
-        });
-        toggleButton.innerText = "See More";
-    }
-}
-
-
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- to your js part -->
-<script src="script.js"></script>
-      <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-                {pageLanguage: 'en'},
-                'google_translate_element'
-            );
-        } 
-  </script>
-  <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

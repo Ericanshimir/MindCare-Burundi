@@ -351,26 +351,25 @@ function fetchQuizzes() {
 
 function displayQuizzes(quizzes) {
     let quizContainer = document.getElementById("quizContainer");
-    quizContainer.innerHTML = ''; // ✅ Clear previous content
+    quizContainer.innerHTML = '';
 
-    let currentUser = "{{ user.username }}"; // ✅ Get the logged-in user
-    let quizProgress = JSON.parse(localStorage.getItem("quizProgress")) || {}; // ✅ Store user-specific progress
-
-    let isSuperuser = "{{ user.is_superuser }}" === "True";  // ✅ Check if user is an admin
-    let isProfessional = "{{ is_admin_or_professional }}" === "True"; // ✅ Check if user is professional
+    let currentUser = "{{ user.username }}";
+    let quizProgress = JSON.parse(localStorage.getItem("quizProgress")) || {};
 
     quizzes.forEach(quiz => {
-        let userProgress = quizProgress[currentUser]?.[quiz.id] || { percentage: null, feedback: "" }; // ✅ Load user’s quiz progress
+        let userProgress = quizProgress[currentUser]?.[quiz.id] || { percentage: null, feedback: "" };
         let hasAttempted = userProgress.percentage !== null;
         let passed = userProgress.percentage >= 70;
 
-        // ✅ Set dynamic button text
         let buttonText = "Start Quiz";
         if (hasAttempted) {
-            buttonText = passed ? "View Results" : "Retake Quiz";
+            buttonText = passed ? "View Results 🏆" : "Retake Quiz 🔄";
         }
 
         let editButtons = "";
+        let isSuperuser = "{{ user.is_superuser }}" === "True";  
+        let isProfessional = "{{ is_admin_or_professional }}" === "True";
+
         if (isSuperuser || isProfessional) {
             editButtons = `
                 <button class="quiz-menu" onclick="toggleMenu('${quiz.id}')">⋮</button>
@@ -386,19 +385,18 @@ function displayQuizzes(quizzes) {
 
         colDiv.innerHTML = `
             <div class="card quiz-card position-relative p-3">
-                ${editButtons} <!-- ✅ Add edit/delete buttons only for professionals & superusers -->
+                ${editButtons}
                 <div class="card-body">
                     <h5 class="card-title">${quiz.title}</h5>
                     <p class="card-text text-muted">${quiz.description}</p>
                     <button class="btn btn-primary w-100" onclick="openQuiz(${quiz.id})">
-                        ${buttonText} 📝
+                        ${buttonText}
                     </button>
 
-                    <!-- ✅ Show feedback only for quizzes this user has attempted -->
                     ${hasAttempted ? `
                         <div class="quiz-feedback mt-3">
                             <h6>📊 Your Results:</h6>
-                            <p><strong>Score:</strong> ${userProgress.percentage}%</p>
+                            <p><strong>Score:</strong> ${userProgress.percentage.toFixed(1)}%</p>
                             <p>${userProgress.feedback}</p>
                         </div>
                     ` : ""}
@@ -409,7 +407,6 @@ function displayQuizzes(quizzes) {
         quizContainer.appendChild(colDiv);
     });
 }
-
 
 function openQuiz(quizId) {
     fetch(`/api/quiz/${quizId}/`)
