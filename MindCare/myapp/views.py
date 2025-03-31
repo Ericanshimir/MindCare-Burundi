@@ -357,7 +357,7 @@ def send_email(subject, message, recipient_email):
         send_mail(
             subject, 
             message, 
-            settings.EMAIL_HOST_USER, 
+            "MindCare Burundi <{}>".format(settings.EMAIL_HOST_USER),
             [recipient_email], 
             fail_silently=False
         )
